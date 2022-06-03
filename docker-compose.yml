@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14.3-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=pass
+  graphql:
+    image: node:16.15-alpine
+    working_dir: /app
+    ports:
+      - 3000:3000
+    entrypoint: /app/entrypoint.sh
+    environment:
+      POSTGRES_URL: postgresql://postgres:pass@db:5432/postgres?schema=public
+      DATABSE_URL: prisma:db/
+    volumes:
+      - ./:/app:cached
+      - node_modules:/app/node_modules
+volumes:
+  node_modules:
