@@ -8,16 +8,24 @@ services:
     environment:
       - POSTGRES_PASSWORD=pass
   graphql:
-    image: node:16.15-alpine
+    image: node:18.3.0-alpine
     working_dir: /app
     ports:
       - 3000:3000
     entrypoint: /app/entrypoint.sh
+    command: yarn dev
     environment:
       POSTGRES_URL: postgresql://postgres:pass@db:5432/postgres?schema=public
-      DATABSE_URL: prisma:db/
+      DATABSE_URL: prisma://localhost:3000/?api_key=foo
     volumes:
       - ./:/app:cached
       - node_modules:/app/node_modules
+  https-portal3000:
+    image: steveltn/https-portal:1
+    ports:
+      - 443:443
+    environment:
+      STAGE: local
+      DOMAINS: 'localhost -> http://host.docker.internal:3000'
 volumes:
   node_modules:
