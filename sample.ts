@@ -8,7 +8,10 @@ const db = new PrismaClient({
 
 
 const main = async () => {
-  const res = await db.user.findFirst({ where: { id: 1 }, select: { Team: true } })
+  const res = await Promise.all([
+    db.user.findFirst({ where: { id: 1 }, select: { id: true, Team: true } }),
+    db.team.findFirst({ select: { id: true, users: { where: { id: 1 } } } }),
+  ])
   console.log(res)
 }
 

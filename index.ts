@@ -1,57 +1,70 @@
-import { ApolloServer, gql } from 'apollo-server-fastify';
-import fastify from 'fastify';
+import express from 'express';
+import { ApolloServer, gql } from 'apollo-server-express';
+import { PrismaClient } from '@prisma/client'
+
+const db = new PrismaClient({
+  log: ['query', 'info', 'warn', 'error'],
+})
 
 const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
+  type User {
+    id: Int
+    name: String
+    email: String
+    teamId: String
+    createdAt: String
+    updatedAt: String
+    Team(where: ANY): Team
   }
+  type Team {
+    id: ID
+    name: String
+    labels: [String]
+    createdAt: String
+    updatedAt: String
+    users(where: ANY): [User]
+  }
+  scalar ANY
 
   type Query {
-    books: [Book]
+    findFirstUser(where: ANY): User
+    findFirstTeam(where: ANY): Team
   }
 `;
 
-const books = [
-  {
-    title: 'The Awakening',
-    author: 'Kate Chopin',
-  },
-  {
-    title: 'City of Glass',
-    author: 'Paul Auster',
-  },
-];
-
 const resolvers = {
+  User: {
+    Team: async (_: unknown, args: any, context: { promise: any }) => {
+      return context.promise = context.promise.Team(args)
+    },
+  },
+  Team: {
+    users: async (_: unknown, args: any, context: { promise: any }) => {
+      return context.promise = context.promise.users(args)
+    },
+  },
   Query: {
-    books: () => books,
+    findFirstUser: async (_: unknown, args: any, context: { promise: any }) => {
+      return context.promise = db.user.findFirst(args)
+    },
+    findFirstTeam: async (_: unknown, args: any, context: { promise: any }) => {
+      return context.promise = db.team.findFirst(args)
+    },
   },
 };
-
-const server = new ApolloServer({
-  typeDefs,
-  resolvers
-});
-
-const app = fastify({
-  logger: true,
-  trustProxy: true,
-});
 
 const port = process.env.PORT || "3000";
 const corsOrigin = process.env.CORS_ORIGIN;
 
-(async function () {
-  await server.start();
-  app.register(
-    server.createHandler({
-      path: "/graphql",
-      cors: corsOrigin ? { origin: corsOrigin.split(",") } : false,
-    })
-  );
-  await app.listen(port, "0.0.0.0", (err, address) => {
-    if (err) throw err;
-    console.log(`🚀 Server ready at ${address}${server.graphqlPath}`);
+(async () => {
+  const app = express();
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers
   });
-})();
+  await server.start();
+  server.applyMiddleware({ app, path: '/*' });
+  app.listen({ port }, () =>
+    console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`)
+  );
+})()
