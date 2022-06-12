@@ -1,61 +1,11 @@
-import "reflect-metadata";
 import express from "express";
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import { PrismaClient, Prisma } from "@prisma/client";
-
-const TypeDefinitions = Prisma.dmmf.schema.outputObjectTypes.model.map((m) => {
-  return `
-      type ${m.name} {
-        ${m.fields
-          .map((f) => {
-            return `${f.name}${
-              f.args.length > 0
-                ? `(${f.args.map(({ name }) => `${name}: Any`).join(" ")})`
-                : ""
-            }: ${
-              f.outputType.isList
-                ? `[${f.outputType.type}]`
-                : `${f.outputType.type}`
-            }${f.isNullable ? "!" : ""}`;
-          })
-          .join(" ")}
-      }
-      `;
-});
-
-const Definitions = Prisma.dmmf.schema.outputObjectTypes.prisma.map((m) => {
-  return `
-      type ${m.name} {
-        ${m.fields
-          .map((f) => {
-            return `${f.name}${
-              f.args.length > 0
-                ? `(${f.args.map(({ name }) => `${name}: Any`).join(" ")})`
-                : ""
-            }: ${
-              f.outputType.isList
-                ? `[${f.outputType.type}]`
-                : `${f.outputType.type}`
-            }${f.isNullable ? "!" : ""}`;
-          })
-          .join(" ")}
-      }
-      `;
-});
+import { typeDefs } from "src/helpers/makeSchema";
 
 const db = new PrismaClient({
   log: ["query", "info", "warn", "error"],
 });
-
-const typeDefs = gql`
-  scalar Any
-  scalar DateTime
-  scalar Json
-
-  ${TypeDefinitions}
-
-  ${Definitions}
-`;
 
 const toLowerFirstLetter = (str: string) => {
   return str.charAt(0).toLowerCase() + str.substring(1);
