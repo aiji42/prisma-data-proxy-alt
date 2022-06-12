@@ -1,11 +1,12 @@
-import { Prisma } from "@prisma/client";
 import { gql } from "apollo-server-express";
+import { DMMF } from "@prisma/client/runtime";
 
-const Definitions = [
-  ...Prisma.dmmf.schema.outputObjectTypes.prisma,
-  ...Prisma.dmmf.schema.outputObjectTypes.model,
-].map((m) => {
-  return `
+export const makeTypeDefs = ({ dmmf }: { dmmf: DMMF.Document }) => {
+  const Definitions = [
+    ...dmmf.schema.outputObjectTypes.prisma,
+    ...dmmf.schema.outputObjectTypes.model,
+  ].map((m) => {
+    return `
       type ${m.name} {
         ${m.fields
           .map((f) => {
@@ -22,12 +23,13 @@ const Definitions = [
           .join(" ")}
       }
       `;
-});
+  });
 
-export const typeDefs = gql`
-  scalar Any
-  scalar DateTime
-  scalar Json
+  return gql`
+    scalar Any
+    scalar DateTime
+    scalar Json
 
-  ${Definitions}
-`;
+    ${Definitions}
+  `;
+};

@@ -5,7 +5,7 @@
   "author": "Aiji Uejima <aiji42@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev index.ts"
+    "dev": "ts-node-dev src/index.ts"
   },
   "prisma": {
     "seed": "yarn ts-node prisma/seed.ts"
