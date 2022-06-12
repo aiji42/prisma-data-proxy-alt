@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Language" AS ENUM ('JAPANESE', 'ENGLISH', 'CHINESE', 'FRENCH', 'GERMAN', 'SPANISH');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -14,7 +17,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Team" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "labels" TEXT[],
+    "language" "Language"[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

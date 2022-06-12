@@ -2,7 +2,18 @@ import { gql } from "apollo-server-express";
 import { DMMF } from "@prisma/client/runtime";
 
 export const makeTypeDefs = ({ dmmf }: { dmmf: DMMF.Document }) => {
-  const Definitions = [
+  const enums = [
+    ...dmmf.schema.enumTypes.prisma,
+    ...(dmmf.schema.enumTypes.model ?? []),
+  ].map(({ name, values }) => {
+    return `
+      enum ${name} {
+        ${values.join(" ")}
+      }
+    `;
+  });
+
+  const types = [
     ...dmmf.schema.outputObjectTypes.prisma,
     ...dmmf.schema.outputObjectTypes.model,
   ].map((m) => {
@@ -30,6 +41,8 @@ export const makeTypeDefs = ({ dmmf }: { dmmf: DMMF.Document }) => {
     scalar DateTime
     scalar Json
 
-    ${Definitions}
+    ${enums}
+
+    ${types}
   `;
 };

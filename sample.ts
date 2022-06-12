@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Language } from "@prisma/client";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -10,9 +10,12 @@ const prepare = async () => {
   await cleanUp();
   let data = await db.team.createMany({
     data: [
-      { name: "team1", labels: ["python", "ruby"] },
-      { name: "team2", labels: ["typescript", "javascript"] },
-      { name: "team3", labels: [] },
+      {
+        name: "team1",
+        language: [Language.JAPANESE, Language.ENGLISH],
+      },
+      { name: "team2", language: [Language.CHINESE, Language.FRENCH] },
+      { name: "team3", language: [] },
     ],
   });
   console.log(data);
@@ -89,7 +92,7 @@ const main = async () => {
     select: {
       id: false,
       name: true,
-      labels: true,
+      language: true,
       users: {
         select: {
           name: true,
@@ -110,8 +113,8 @@ const main = async () => {
     },
     where: {
       name: { in: ["team1", "team2"] },
-      labels: {
-        hasSome: ["ruby", "javascript"],
+      language: {
+        hasSome: ["JAPANESE", "FRENCH"],
       },
     },
   });
@@ -174,20 +177,6 @@ const main = async () => {
     where: { name: { contains: "team" } },
   });
   console.dir(userDeleteMany);
-
-  return {
-    userFindFirst,
-    userFindMany,
-    teamFindMany,
-    // teamCount,
-    // userCount,
-    userCreate,
-    userCreateMany,
-    userUpdate,
-    userUpdateMany,
-    userDelete,
-    userDeleteMany,
-  };
 };
 
 main();

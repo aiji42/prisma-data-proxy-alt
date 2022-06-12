@@ -21,8 +21,17 @@ model User {
 model Team {
   id        String   @id @default(uuid())
   name      String
-  labels    String[]
+  language  Language[]
   users     User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum Language {
+  JAPANESE
+  ENGLISH
+  CHINESE
+  FRENCH
+  GERMAN
+  SPANISH
 }
