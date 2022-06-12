@@ -52,7 +52,7 @@ const main = async () => {
       where: { name: { contains: "t", mode: "insensitive" } },
       select: { users: { where: { id: 1 } } },
     }),
-    // db.team.aggregate({ _count: true }),
+    db.team.aggregate({ _count: { _all: true, id: true }, where: { id: "1" } }),
   ]);
   console.log(res);
 
@@ -120,20 +120,20 @@ const main = async () => {
   });
   console.dir(teamFindMany);
 
-  // console.log('===== db.team.count() =====')
-  // const teamCount = await db.team.count()
-  // console.dir(teamCount)
+  console.log("===== db.team.count() =====");
+  const teamCount = await db.team.count();
+  console.dir(teamCount);
 
-  // console.log('===== db.user.count() =====')
-  // const userCount = await db.user.count({
-  //   select: {
-  //     teamId: true,
-  //     id: true,
-  //     _all: true,
-  //   },
-  //   where: { name: { contains: 'o', mode: 'insensitive' } },
-  // })
-  // console.dir(userCount)
+  console.log("===== db.user.count() =====");
+  const userCount = await db.user.count({
+    select: {
+      teamId: true,
+      id: true,
+      _all: true,
+    },
+    where: { name: { contains: "o", mode: "insensitive" } },
+  });
+  console.dir(userCount);
 
   console.log("===== db.user.create() =====");
   const userCreate = await db.user.create({

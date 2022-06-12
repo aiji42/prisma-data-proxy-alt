@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client/scripts/default-index";
 import { DMMF } from "@prisma/client/runtime";
+import { FieldNode, SelectionNode } from "graphql";
 
 const toLowerFirstLetter = (str: string) => {
   return str.charAt(0).toLowerCase() + str.substring(1);
@@ -20,16 +21,51 @@ const functionsMappings = (
   );
 };
 
+interface AggregateField {
+  [x: string]: true | AggregateField;
+}
+
+const digAggregateField = (
+  selections: readonly SelectionNode[]
+): AggregateField => {
+  return selections.reduce((res, selection) => {
+    if ("name" in selection && "selectionSet" in selection) {
+      const dug = digAggregateField(selection.selectionSet?.selections ?? []);
+      return {
+        ...res,
+        [selection.name.value]: Object.keys(dug).length ? dug : true,
+      };
+    }
+    return res;
+  }, {});
+};
+
 const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
   const mapping = functionsMappings(dmmf);
   return new Proxy(
     {},
     {
       get: (_, method) => {
-        return async (...[, args]: [unknown, Record<string, unknown>]) => {
+        return async (
+          ...[, args, , info]: [
+            unknown,
+            Record<string, unknown>,
+            unknown,
+            { fieldNodes: readonly FieldNode[] }
+          ]
+        ) => {
           const { operation, model } = mapping[method.toString()];
 
           try {
+            if (operation === "aggregate") {
+              return db[toLowerFirstLetter(model)][operation]({
+                ...digAggregateField(
+                  info.fieldNodes[0].selectionSet?.selections ?? []
+                ),
+                ...args,
+              });
+            }
+
             return db[toLowerFirstLetter(model)][operation](args);
           } catch (e) {
             console.error(e);
