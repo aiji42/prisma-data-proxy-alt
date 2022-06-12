@@ -29,7 +29,12 @@ const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
         return async (...[, args]: [unknown, Record<string, unknown>]) => {
           const { operation, model } = mapping[method.toString()];
 
-          return db[toLowerFirstLetter(model)][operation](args);
+          try {
+            return db[toLowerFirstLetter(model)][operation](args);
+          } catch (e) {
+            console.error(e);
+            throw e;
+          }
         };
       },
     }
@@ -52,9 +57,14 @@ const relationOperationProxy = (
           parent: Record<string, unknown>,
           args: Record<string, unknown>
         ) => {
-          return await db[toLowerFirstLetter(name)]
-            .findUnique({ where: { [idFieldName]: parent[idFieldName] } })
-            [method](args);
+          try {
+            return await db[toLowerFirstLetter(name)]
+              .findUnique({ where: { [idFieldName]: parent[idFieldName] } })
+              [method](args);
+          } catch (e) {
+            console.error(e);
+            throw e;
+          }
         };
       },
     }

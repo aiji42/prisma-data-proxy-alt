@@ -18,7 +18,7 @@ export const makeTypeDefs = ({ dmmf }: { dmmf: DMMF.Document }) => {
               f.outputType.isList
                 ? `[${f.outputType.type}]`
                 : `${f.outputType.type}`
-            }${f.isNullable ? "!" : ""}`;
+            }${f.isNullable ? "" : "!"}`;
           })
           .join(" ")}
       }
