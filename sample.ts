@@ -52,9 +52,10 @@ const main = async () => {
       where: { name: { contains: "t", mode: "insensitive" } },
       select: { users: { where: { id: 1 } } },
     }),
+    db.user.groupBy({ by: ["name"], _max: { id: true } }),
     db.team.aggregate({ _count: { _all: true, id: true }, where: { id: "1" } }),
   ]);
-  console.log(res);
+  console.dir(res, { depth: 5 });
 
   const userFindFirst = await db.user.findFirst();
   console.log("===== db.user.findFirst() =====");

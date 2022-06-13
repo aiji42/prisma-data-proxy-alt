@@ -26,11 +26,16 @@ interface AggregateField {
 }
 
 const digAggregateField = (
-  selections: readonly SelectionNode[]
+  selections: readonly SelectionNode[],
+  root: boolean = true
 ): AggregateField => {
   return selections.reduce((res, selection) => {
     if ("name" in selection && "selectionSet" in selection) {
-      const dug = digAggregateField(selection.selectionSet?.selections ?? []);
+      if (root && !selection.name.value.startsWith("_")) return res;
+      const dug = digAggregateField(
+        selection.selectionSet?.selections ?? [],
+        false
+      );
       return {
         ...res,
         [selection.name.value]: Object.keys(dug).length ? dug : true,
@@ -57,7 +62,7 @@ const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
           const { operation, model } = mapping[method.toString()];
 
           try {
-            if (operation === "aggregate") {
+            if (operation === "aggregate" || operation === "groupBy") {
               return db[toLowerFirstLetter(model)][operation]({
                 ...digAggregateField(
                   info.fieldNodes[0].selectionSet?.selections ?? []
