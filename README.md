@@ -8,6 +8,8 @@ However, it is currently only available in a limited number of regions and the c
 Therefore, I have created a server library that replaces the Prisma Data Proxy. Using it, you are free from those stressful limitations.  
 You can deploy it on any platform in any region you like and use any data source you like, such as Supabase.
 
+No changes are required to your prisma client code, just set the `DATABASE_URL` to the URL you self-hosted with this library.
+
 ### Caution 
 
 This library is unaffiliated with the Prisma development team and is unofficial.  
