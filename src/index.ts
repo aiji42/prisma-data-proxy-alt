@@ -4,6 +4,7 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import { makeTypeDefs } from "./helpers/makeTypeDefs";
 import { makeResolver } from "./helpers/makeResolver";
 import { customError } from "./helpers/customError";
+import { authenticate } from "./helpers/authenticate";
 
 const db = new PrismaClient({
   log: ["query", "info", "warn", "error"],
@@ -11,6 +12,7 @@ const db = new PrismaClient({
 
 const port = process.env.PORT || "3000";
 const corsOrigin = process.env.CORS_ORIGIN;
+const authToken = process.env.DATA_PROXY_API_KEY || "foo";
 
 (async () => {
   const app = express();
@@ -21,6 +23,7 @@ const corsOrigin = process.env.CORS_ORIGIN;
 
   await Promise.all([db.$connect(), server.start()]);
   app.use(customError);
+  app.use(authenticate(authToken));
   server.applyMiddleware({
     app,
     path: "/*",
