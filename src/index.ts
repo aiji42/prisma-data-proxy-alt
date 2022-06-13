@@ -3,8 +3,8 @@ import { ApolloServer } from "apollo-server-express";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { makeTypeDefs } from "./helpers/makeTypeDefs";
 import { makeResolver } from "./helpers/makeResolver";
-import { customError } from "./helpers/customError";
-import { authenticate } from "./helpers/authenticate";
+import { errorHandler } from "./middlewares/errorHandler";
+import { authenticate } from "./middlewares/authenticate";
 
 const db = new PrismaClient({
   log: ["query", "info", "warn", "error"],
@@ -22,7 +22,7 @@ const authToken = process.env.DATA_PROXY_API_KEY || "foo";
   });
 
   await Promise.all([db.$connect(), server.start()]);
-  app.use(customError);
+  app.use(errorHandler);
   app.use(authenticate(authToken));
   server.applyMiddleware({
     app,
