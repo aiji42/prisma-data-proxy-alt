@@ -1,7 +1,7 @@
 {
   "name": "prisma-data-proxy-alt",
   "description": "",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -17,15 +17,21 @@
   "scripts": {
     "dev:server": "ts-node-dev src/server.ts",
     "dev:query": "DATABASE_URL=prisma://localhost/?api_key=custometoken yarn ts-node sample.ts ",
-    "build": "tsc"
+    "build": "tsc",
+    "semantic-release": "semantic-release",
+    "prepare": "husky install"
   },
   "prisma": {
     "seed": "yarn ts-node prisma/seed.ts"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.2",
+    "@commitlint/config-conventional": "^17.0.2",
     "@tsconfig/node16": "^1.0.2",
+    "husky": "^8.0.1",
     "prettier": "^2.6.2",
     "prisma": "^3.15.0",
+    "semantic-release": "^19.0.3",
     "ts-node": "^10.8.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.7.3"
@@ -36,5 +42,10 @@
     "apollo-server-express": "^3.8.2",
     "express": "^4.18.1",
     "graphql": "^16.5.0"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
   }
 }
