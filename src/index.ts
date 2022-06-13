@@ -21,7 +21,15 @@ const corsOrigin = process.env.CORS_ORIGIN;
 
   await Promise.all([db.$connect(), server.start()]);
   app.use(customError);
-  server.applyMiddleware({ app, path: "/*" });
+  server.applyMiddleware({
+    app,
+    path: "/*",
+    cors: corsOrigin
+      ? {
+          origin: corsOrigin.split(","),
+        }
+      : false,
+  });
   app.listen({ port }, () =>
     console.log(
       `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`

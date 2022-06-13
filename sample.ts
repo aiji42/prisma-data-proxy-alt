@@ -3,7 +3,7 @@ import { PrismaClient, Language } from "@prisma/client";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const db = new PrismaClient({
-  log: ["query", "info", "warn", "error"],
+  log: ["query", "warn", "error"],
 });
 
 const prepare = async () => {
