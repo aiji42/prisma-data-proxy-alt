@@ -1,12 +1,23 @@
 {
   "name": "prisma-data-proxy-alt",
+  "description": "",
   "version": "1.0.0",
-  "main": "index.js",
-  "author": "Aiji Uejima <aiji42@gmail.com>",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/aiji42/prisma-data-proxy-alt",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aiji42/prisma-data-proxy-alt"
+  },
+  "author": "Aiji Uejima <aiji42@gmail.com> (https://twitter.com/aiji42_dev)",
   "license": "MIT",
   "scripts": {
     "dev:server": "ts-node-dev src/server.ts",
-    "dev:query": "DATABASE_URL=prisma://localhost/?api_key=custometoken yarn ts-node sample.ts "
+    "dev:query": "DATABASE_URL=prisma://localhost/?api_key=custometoken yarn ts-node sample.ts ",
+    "build": "tsc"
   },
   "prisma": {
     "seed": "yarn ts-node prisma/seed.ts"
