@@ -5,7 +5,7 @@
   "author": "Aiji Uejima <aiji42@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev:server": "ts-node-dev src/index.ts",
+    "dev:server": "ts-node-dev src/server.ts",
     "dev:query": "DATABASE_URL=prisma://localhost/?api_key=custometoken yarn ts-node sample.ts "
   },
   "prisma": {

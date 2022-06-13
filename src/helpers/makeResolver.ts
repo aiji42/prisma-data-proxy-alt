@@ -111,8 +111,8 @@ const relatedOperationProxy = (
 };
 
 export const makeResolver = (
-  db: PrismaClient,
-  { dmmf }: { dmmf: DMMF.Document }
+  { dmmf }: { dmmf: DMMF.Document },
+  db: PrismaClient
 ) => {
   return {
     ...Object.fromEntries(
