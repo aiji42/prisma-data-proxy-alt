@@ -42,10 +42,5 @@
     "apollo-server-express": "^3.8.2",
     "express": "^4.18.1",
     "graphql": "^16.5.0"
-  },
-  "release": {
-    "branches": [
-      "main"
-    ]
   }
 }
