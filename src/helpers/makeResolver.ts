@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client/scripts/default-index";
 import { DMMF } from "@prisma/client/runtime";
-import { FieldNode, SelectionNode } from "graphql";
+import { SelectionNode } from "graphql";
+import { IFieldResolver } from "@graphql-tools/utils";
 
 const toLowerFirstLetter = (str: string) => {
   return str.charAt(0).toLowerCase() + str.substring(1);
@@ -27,11 +28,14 @@ interface AggregateField {
 
 const digAggregateField = (
   selections: readonly SelectionNode[],
-  root: boolean = true
+  isRoot: boolean = true
 ): AggregateField => {
   return selections.reduce((res, selection) => {
-    if ("name" in selection && "selectionSet" in selection) {
-      if (root && !selection.name.value.startsWith("_")) return res;
+    if (
+      "name" in selection &&
+      "selectionSet" in selection &&
+      !(isRoot && !selection.name.value.startsWith("_"))
+    ) {
       const dug = digAggregateField(
         selection.selectionSet?.selections ?? [],
         false
@@ -50,15 +54,8 @@ const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
   return new Proxy(
     {},
     {
-      get: (_, method) => {
-        return async (
-          ...[, args, , info]: [
-            unknown,
-            Record<string, unknown>,
-            unknown,
-            { fieldNodes: readonly FieldNode[] }
-          ]
-        ) => {
+      get: (_, method): IFieldResolver<Record<string, unknown>, unknown> => {
+        return async (...[, args, , info]) => {
           const { operation, model } = mapping[method.toString()];
 
           const newArgs =
@@ -83,22 +80,22 @@ const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
   );
 };
 
-const relationOperationProxy = (
+const relatedOperationProxy = (
   db: PrismaClient,
   { name, fields }: DMMF.Model
 ) => {
   return new Proxy(
     {},
     {
-      get: (_, method) => {
+      get: (
+        _,
+        method
+      ): IFieldResolver<Record<string, unknown>, unknown> | undefined => {
         const idFieldName = fields.find(({ isId }) => isId)?.name;
         const field = fields.find(({ name }) => name === method.toString());
         if (!idFieldName || !field?.relationName) return undefined;
 
-        return async (
-          parent: Record<string, unknown>,
-          args: Record<string, unknown>
-        ) => {
+        return async (parent, args) => {
           try {
             return await db[toLowerFirstLetter(name)]
               .findUnique({ where: { [idFieldName]: parent[idFieldName] } })
@@ -121,7 +118,7 @@ export const makeResolver = (
     ...Object.fromEntries(
       dmmf.datamodel.models.map((model) => [
         model.name,
-        relationOperationProxy(db, model),
+        relatedOperationProxy(db, model),
       ])
     ),
     Query: rootOperationProxy(db, dmmf),
