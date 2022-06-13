@@ -61,17 +61,18 @@ const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
         ) => {
           const { operation, model } = mapping[method.toString()];
 
-          try {
-            if (operation === "aggregate" || operation === "groupBy") {
-              return db[toLowerFirstLetter(model)][operation]({
-                ...digAggregateField(
-                  info.fieldNodes[0].selectionSet?.selections ?? []
-                ),
-                ...args,
-              });
-            }
+          const newArgs =
+            operation === "aggregate" || operation === "groupBy"
+              ? {
+                  ...digAggregateField(
+                    info.fieldNodes[0].selectionSet?.selections ?? []
+                  ),
+                  ...args,
+                }
+              : args;
 
-            return db[toLowerFirstLetter(model)][operation](args);
+          try {
+            return db[toLowerFirstLetter(model)][operation](newArgs);
           } catch (e) {
             console.error(e);
             throw e;
