@@ -1,6 +1,6 @@
 {
   "name": "prisma-data-proxy-alt",
-  "description": "",
+  "description": "This is a library to alternate and self-host the [Prisma Data Proxy (cloud.prisma.io)](https://www.prisma.io/docs/concepts/data-platform/data-proxy).",
   "version": "0.0.0-development",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
