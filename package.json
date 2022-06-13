@@ -1,11 +1,12 @@
 {
-  "name": "prisma-dataproxy-server",
+  "name": "prisma-data-proxy-alt",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Aiji Uejima <aiji42@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev src/index.ts"
+    "dev:server": "ts-node-dev src/index.ts",
+    "dev:query": "DATABASE_URL=prisma://localhost/?api_key=custometoken yarn ts-node sample.ts "
   },
   "prisma": {
     "seed": "yarn ts-node prisma/seed.ts"

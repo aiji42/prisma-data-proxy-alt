@@ -13,9 +13,10 @@ services:
     ports:
       - 3000:3000
     entrypoint: /app/entrypoint.sh
-    command: yarn dev
+    command: yarn dev:server
     environment:
       DATABASE_URL: postgresql://postgres:pass@db:5432/postgres?schema=public
+      DATA_PROXY_API_KEY: custometoken
     volumes:
       - ./:/app:cached
       - node_modules:/app/node_modules
