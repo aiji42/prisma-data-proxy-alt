@@ -8,11 +8,11 @@ WORKDIR /app
 
 FROM base as builder
 
-COPY tsconfig.json .
-COPY package.json .
-COPY yarn.lock .
-COPY prisma/schema.prisma ./prisma/schema.prisma
-COPY index.ts .
+COPY expamle/gcp/tsconfig.json .
+COPY expamle/gcp/package.json .
+COPY expamle/gcp/yarn.lock .
+COPY expamle/gcp/prisma/schema.prisma ./prisma/schema.prisma
+COPY expamle/gcp/index.ts .
 
 RUN yarn install
 
@@ -23,7 +23,7 @@ FROM base
 
 ENV PORT=8080
 
-COPY package.json .
+COPY --from=builder /app/package.json .
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
