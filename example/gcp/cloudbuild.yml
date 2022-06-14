@@ -4,6 +4,7 @@ steps:
       - --destination=gcr.io/$PROJECT_ID/prisma-data-proxy-alt:$SHORT_SHA
       - --destination=gcr.io/$PROJECT_ID/prisma-data-proxy-alt:latest
       - --cache=true
+    dir: example/gcp
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
