@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  teamId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  Team Team? @relation(fields: [teamId], references: [id])
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  name      String
+  language  Language[]
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum Language {
+  JAPANESE
+  ENGLISH
+  CHINESE
+  FRENCH
+  GERMAN
+  SPANISH
+}

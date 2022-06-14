@@ -1,0 +1,25 @@
+steps:
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - --destination=gcr.io/$PROJECT_ID/prisma-data-proxy-alt:$SHORT_SHA
+      - --destination=gcr.io/$PROJECT_ID/prisma-data-proxy-alt:latest
+      - --cache=true
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - prisma-data-proxy-alt
+      - --image
+      - gcr.io/$PROJECT_ID/prisma-data-proxy-alt:latest
+      - --region
+      - $_REGION
+      - --allow-unauthenticated
+      - --set-env-vars
+      - DATABASE_URL=$_DATABASE_URL
+      - --set-env-vars
+      - DATA_PROXY_API_KEY=$_DATA_PROXY_API_KEY
+substitutions:
+  _REGION: asia-northeast1
+  _DATABASE_URL: your_database_url
+  _DATA_PROXY_API_KEY: your_api_key
