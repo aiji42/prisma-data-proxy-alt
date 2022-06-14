@@ -169,4 +169,8 @@ DATABSE_URL=prisma://${YOUR_DEPLOYED_PROJECT_DOMAIN}?api_key=${DATA_PROXY_API_KE
 
 ## Contribution
 
+Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
 ## LICENCE
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details
