@@ -8,11 +8,11 @@ WORKDIR /app
 
 FROM base as builder
 
-COPY expamle/gcp/tsconfig.json .
-COPY expamle/gcp/package.json .
-COPY expamle/gcp/yarn.lock .
-COPY expamle/gcp/prisma/schema.prisma ./prisma/schema.prisma
-COPY expamle/gcp/index.ts .
+COPY example/gcp/tsconfig.json .
+COPY example/gcp/package.json .
+COPY example/gcp/yarn.lock .
+COPY example/gcp/prisma/schema.prisma ./prisma/schema.prisma
+COPY example/gcp/index.ts .
 
 RUN yarn install
 
