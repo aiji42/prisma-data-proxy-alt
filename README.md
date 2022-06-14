@@ -18,6 +18,10 @@ Future updates to @prisma/client may make this library unavailable.
 
 Use at your own risk.
 
+## Overview
+
+![overview](./images/overview.png)
+
 ## Setup
 
 ### Setup proxy server
