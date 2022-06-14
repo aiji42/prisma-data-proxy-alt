@@ -19,7 +19,8 @@
     "dev:query": "DATABASE_URL=prisma://localhost/?api_key=custometoken yarn ts-node sample.ts ",
     "build": "tsc",
     "semantic-release": "semantic-release",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepack": "yarn build"
   },
   "prisma": {
     "seed": "yarn ts-node prisma/seed.ts"
