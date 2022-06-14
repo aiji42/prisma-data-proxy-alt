@@ -81,7 +81,7 @@ yarn add @prisma/client
 
 ### GCP Cloud Run
 
-Create `dockerfile`
+Create `Dockerfile`
 
 ```dockerfile
 FROM node:16.15-bullseye-slim as base
@@ -109,7 +109,7 @@ FROM base
 
 ENV PORT=8080
 
-COPY package.json .
+COPY --from=builder /app/package.json .
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
