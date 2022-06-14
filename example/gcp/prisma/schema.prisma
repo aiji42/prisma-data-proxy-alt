@@ -6,35 +6,25 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  teamId    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
-  Team Team? @relation(fields: [teamId], references: [id])
-}
-
-model Team {
+model Link {
   id        String   @id @default(uuid())
-  name      String
-  language  Language[]
-  users     User[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  updatedAt DateTime @updatedAt
+  url       String
+  shortUrl  String
+  userId    String?
+  User      User?    @relation(fields: [userId], references: [id])
 }
 
-enum Language {
-  JAPANESE
-  ENGLISH
-  CHINESE
-  FRENCH
-  GERMAN
-  SPANISH
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String?
+  email     String
+  links     Link[]
 }

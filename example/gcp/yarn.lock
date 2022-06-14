@@ -746,10 +746,10 @@ path-to-regexp@0.1.7:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==
 
-prisma-data-proxy-alt@v1.0.0-beta.3:
-  version "1.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/prisma-data-proxy-alt/-/prisma-data-proxy-alt-1.0.0-beta.3.tgz#5b59be2e84b23da9669ce60e51776dedf23a6c42"
-  integrity sha512-hNn3s8EoTzOxqx4DMmWto+qgu3CFtDL4+o3iJv1QhwhYp1+8wCQ8DHaTCHhMaTQmyEm0e20ufiOPK+5FyncAvA==
+prisma-data-proxy-alt@v1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/prisma-data-proxy-alt/-/prisma-data-proxy-alt-1.0.0.tgz#785ce46bc642e7f1e0003c59bca099de71ea266a"
+  integrity sha512-ZVRUytlegvVwEUvuau0mnOCCzAJinxO134rniKxbRPg0bIrW/6/9wtZmArX0muB0uZdGrqG4PJvjHmeEvI6qQw==
   dependencies:
     "@prisma/client" "3.15.0"
     apollo-server-core "^3.8.2"
