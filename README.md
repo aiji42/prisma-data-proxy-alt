@@ -1,4 +1,4 @@
-# Prisma Data Proxy Alternative
+# Alternative Prisma Data Proxy
 
 This is a library to alternate and self-host the [Prisma Data Proxy (cloud.prisma.io)](https://www.prisma.io/docs/concepts/data-platform/data-proxy).
 
@@ -10,14 +10,6 @@ You can deploy it on any platform in any region you like and use any data source
 
 No changes are required to your prisma client code, just set the `DATABASE_URL` to the URL you self-hosted with this library.
 
-### Caution 
-
-This library is unaffiliated with the Prisma development team and is unofficial.  
-
-Future updates to @prisma/client may make this library unavailable.
-
-Use at your own risk.
-
 ## Overview
 
 ![overview](./images/overview.png)
@@ -27,14 +19,12 @@ Use at your own risk.
 ### Setup proxy server
 
 First, an Apollo server is built as a substitute for the data proxy.  
-Use `express` as middleware.
 
 ```bash
 yarn add prisma-data-proxy-alt express apollo-server-express
 ```
 
 The server script is as follows.  
-Note that requests can reach paths other than `/graphql`. It is recommended that all paths be made available to receive requests.
 
 ```ts
 // index.ts
@@ -53,8 +43,8 @@ const apiKey = process.env.DATA_PROXY_API_KEY || "foo";
   const server = new ApolloServer(makeServerConfig(Prisma, db));
 
   await Promise.all([db.$connect(), server.start()]);
-  app.use(beforeMiddleware());
-  app.use(afterMiddleware({ apiKey }));
+  app.use(beforeMiddleware({ apiKey }));
+  app.use(afterMiddleware());
   server.applyMiddleware({ app, path: "/*" });
   app.listen({ port }, () =>
     console.log(
@@ -66,14 +56,17 @@ const apiKey = process.env.DATA_PROXY_API_KEY || "foo";
 
 ### Setup Prisma
 
-Include prisma schema in your project. **The same schema as the client must be made available for reference.**  
+Include prisma schema in your project. **The same schema as the client**.  
 
-Install `prisma` (to generate) and `@prisma/client`.
+```bash
+cp your_client_project_path/prisma/schema.prisma ./prisma/schema.prisma
+```
+
+Install `prisma` and `@prisma/client`.
 ```bash
 yarn add -D prisma
 yarn add @prisma/client
 ```
-
 
 ## Deploy 
 
@@ -145,27 +138,30 @@ substitutions:
   _DATA_PROXY_API_KEY: your_api_key
 ```
 
-From the GCP web console, link cloudbuild to the repository.
-Set `_REGION`, `_DATABASE_URL`, and `_DATA_PROXY_API_KEY` in the substitutions.
+Create a new trigger from the GCP Cloud Build web console and link it to your repository.  
 
-- `_REGION`: The region of cloud run deploy
-- `_DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc.)
-- `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. This value is used as an authentication token for connections from the client.
+Set `_REGION`, `_DATABASE_URL`, and `_DATA_PROXY_API_KEY` in the substitution values.
+
+![](./images/gcp.png)
+
+- `_REGION`: The region of deploy target for Cloud Run
+- `_DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc...)
+- `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
 
-Note the URL of the cloud run after deployment is complete.
+## For Client (on your application)
 
-## For Client
-
-On the client side, prisma client is generated in data proxy mode.
+On the client side, generate the Prisma client in data proxy mode `--data-proxy`. [official document](https://www.prisma.io/docs/concepts/data-platform/data-proxy#step-4-generate-the-client)
 ```bash
 yarn prisma generate --data-proxy
 ```
 
-Create a `DATABSE_URL` from the domain of the server you deployed and the api key (`DATA_PROXY_API_KEY`) you set for it.
+Set the `DATABSE_URL` from the domain of the server you deployed and the api key (`DATA_PROXY_API_KEY`) you set for it.
 ```
 DATABSE_URL=prisma://${YOUR_DEPLOYED_PROJECT_DOMAIN}?api_key=${DATA_PROXY_API_KEY}
 ```
+
+**Now you can connect to the (alternative) Data Proxy from your application. 🎉**
 
 ## Contribution
 
