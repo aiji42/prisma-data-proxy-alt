@@ -92,7 +92,6 @@ WORKDIR /app
 
 FROM base as builder
 
-COPY tsconfig.json .
 COPY package.json .
 COPY yarn.lock .
 COPY prisma/schema.prisma ./prisma/schema.prisma
@@ -101,20 +100,19 @@ COPY index.ts .
 RUN yarn install
 
 RUN yarn prisma generate
-RUN yarn build
+RUN yarn tsc index.ts --esModuleInterop
 
 FROM base
 
 ENV PORT=8080
 
-COPY --from=builder /app/package.json .
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/index.js .
 
 USER node
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["node", "dist/index.js"]
+CMD ["node", "index.js"]
 ```
 
 Create `cloudbuild.yml`
