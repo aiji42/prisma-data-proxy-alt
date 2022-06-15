@@ -23,13 +23,11 @@ Run:
 yarn
 ```
 
-<!-- 
 Make sure everything is correctly setup with:
 
 ```bash
 yarn test:run
 ```
--->
 
 ## How to write commit messages
 
