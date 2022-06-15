@@ -7,12 +7,13 @@
 This is a library to alternate and self-host the [Prisma Data Proxy (cloud.prisma.io)](https://www.prisma.io/docs/concepts/data-platform/data-proxy).
 
 In order to deploy your project to edge runtimes (such as Cloudflare Workers or Vercel Edge Functions) and use Prisma, you will need to use the Prisma Data Proxy.  
-However, it is currently only available in a limited number of regions and the choice of data sources is limited. There is also the stress of latency caused by cold standby.
+However, at present, instances can only be built in limited areas, and there are also delays caused by cold standby. This is a very stressful problem.
 
-Therefore, I have created a server library that replaces the Prisma Data Proxy. Using it, you are free from those stressful limitations.  
-You can deploy it on any platform in any region you like and use any data source you like, such as Supabase.
+Therefore, we have created a server library to replace Prisma Data Proxy. With it, you are free from stressful limitations.
+You can deploy it on any platform in any region you like and use any data source you like, such as Supabase or Planetscale.
 
-No changes are required to your prisma client code, just set the `DATABASE_URL` to the URL you self-hosted with this library.
+No changes are required to your prisma client code, just set the `DATABASE_URL` to the URL you self-hosted with this library.  
+This is not an official library, but it works the same as Prisma Data Proxy.
 
 ## Overview
 
