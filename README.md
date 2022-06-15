@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/prisma-data-proxy-alt.svg)](https://badge.fury.io/js/prisma-data-proxy-alt)
+
 # Alternative Prisma Data Proxy
 
 This is a library to alternate and self-host the [Prisma Data Proxy (cloud.prisma.io)](https://www.prisma.io/docs/concepts/data-platform/data-proxy).
