@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-export const errorHandler =
+export const afterMiddleware =
   () => (req: Request, res: Response, next: NextFunction) => {
     const oldSend = res.send;
 

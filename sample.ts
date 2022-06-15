@@ -1,4 +1,4 @@
-import { PrismaClient, Language } from "@prisma/client";
+import { PrismaClient, Language } from "@prisma/client/edge";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 

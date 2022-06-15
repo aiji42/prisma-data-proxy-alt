@@ -1,3 +1,3 @@
 export { makeServerConfig } from "./helpers/makeServerConfig";
-export { authenticate } from "./middlewares/authenticate";
-export { errorHandler } from "./middlewares/errorHandler";
+export { beforeMiddleware } from "./middlewares/beforeMiddleware";
+export { afterMiddleware } from "./middlewares/afterMiddleware";
