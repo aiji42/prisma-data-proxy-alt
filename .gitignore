@@ -1,5 +1,6 @@
 dist
 node_modules
+coverage
 # Keep environment variables out of version control
 .env
 

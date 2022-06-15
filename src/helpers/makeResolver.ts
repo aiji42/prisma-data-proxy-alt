@@ -49,7 +49,7 @@ const digAggregateField = (
   }, {});
 };
 
-const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
+export const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
   const mapping = functionsMappings(dmmf);
   return new Proxy(
     {},
@@ -80,7 +80,7 @@ const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
   );
 };
 
-const relatedOperationProxy = (
+export const relatedOperationProxy = (
   db: PrismaClient,
   { name, fields }: DMMF.Model
 ) => {

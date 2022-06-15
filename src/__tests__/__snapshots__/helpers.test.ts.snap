@@ -1,0 +1,103 @@
+// Vitest Snapshot v1
+
+exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
+"
+    scalar Any
+    scalar DateTime
+    scalar Json
+    
+      enum UserScalarFieldEnum {
+        id email name teamId createdAt updatedAt
+      }
+    ,
+      enum TeamScalarFieldEnum {
+        id name language createdAt updatedAt
+      }
+    ,
+      enum SortOrder {
+        asc desc
+      }
+    ,
+      enum QueryMode {
+        default insensitive
+      }
+    ,
+      enum Language {
+        JAPANESE ENGLISH CHINESE FRENCH GERMAN SPANISH
+      }
+    
+    
+      type Query {
+        findFirstUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): User findManyUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [User]! aggregateUser(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateUser! groupByUser(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [UserGroupByOutputType]! findUniqueUser(where: Any): User findFirstTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): Team findManyTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [Team]! aggregateTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateTeam! groupByTeam(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [TeamGroupByOutputType]! findUniqueTeam(where: Any): Team
+      }
+      ,
+      type Mutation {
+        createOneUser(data: Any): User! upsertOneUser(where: Any create: Any update: Any): User! createManyUser(data: Any skipDuplicates: Any): AffectedRowsOutput! deleteOneUser(where: Any): User updateOneUser(data: Any where: Any): User updateManyUser(data: Any where: Any): AffectedRowsOutput! deleteManyUser(where: Any): AffectedRowsOutput! createOneTeam(data: Any): Team! upsertOneTeam(where: Any create: Any update: Any): Team! createManyTeam(data: Any skipDuplicates: Any): AffectedRowsOutput! deleteOneTeam(where: Any): Team updateOneTeam(data: Any where: Any): Team updateManyTeam(data: Any where: Any): AffectedRowsOutput! deleteManyTeam(where: Any): AffectedRowsOutput! executeRaw(query: Any parameters: Any): Json! queryRaw(query: Any parameters: Any): Json!
+      }
+      ,
+      type AggregateUser {
+        _count: UserCountAggregateOutputType _avg: UserAvgAggregateOutputType _sum: UserSumAggregateOutputType _min: UserMinAggregateOutputType _max: UserMaxAggregateOutputType
+      }
+      ,
+      type UserGroupByOutputType {
+        id: Int! email: String! name: String teamId: String createdAt: DateTime! updatedAt: DateTime! _count: UserCountAggregateOutputType _avg: UserAvgAggregateOutputType _sum: UserSumAggregateOutputType _min: UserMinAggregateOutputType _max: UserMaxAggregateOutputType
+      }
+      ,
+      type AggregateTeam {
+        _count: TeamCountAggregateOutputType _min: TeamMinAggregateOutputType _max: TeamMaxAggregateOutputType
+      }
+      ,
+      type TeamGroupByOutputType {
+        id: String! name: String! language: [Language] createdAt: DateTime! updatedAt: DateTime! _count: TeamCountAggregateOutputType _min: TeamMinAggregateOutputType _max: TeamMaxAggregateOutputType
+      }
+      ,
+      type AffectedRowsOutput {
+        count: Int!
+      }
+      ,
+      type UserCountAggregateOutputType {
+        id: Int! email: Int! name: Int! teamId: Int! createdAt: Int! updatedAt: Int! _all: Int!
+      }
+      ,
+      type UserAvgAggregateOutputType {
+        id: Float
+      }
+      ,
+      type UserSumAggregateOutputType {
+        id: Int
+      }
+      ,
+      type UserMinAggregateOutputType {
+        id: Int email: String name: String teamId: String createdAt: DateTime updatedAt: DateTime
+      }
+      ,
+      type UserMaxAggregateOutputType {
+        id: Int email: String name: String teamId: String createdAt: DateTime updatedAt: DateTime
+      }
+      ,
+      type TeamCountOutputType {
+        users: Int!
+      }
+      ,
+      type TeamCountAggregateOutputType {
+        id: Int! name: Int! language: Int! createdAt: Int! updatedAt: Int! _all: Int!
+      }
+      ,
+      type TeamMinAggregateOutputType {
+        id: String name: String createdAt: DateTime updatedAt: DateTime
+      }
+      ,
+      type TeamMaxAggregateOutputType {
+        id: String name: String createdAt: DateTime updatedAt: DateTime
+      }
+      ,
+      type User {
+        id: Int! email: String! name: String teamId: String createdAt: DateTime! updatedAt: DateTime! Team: Team
+      }
+      ,
+      type Team {
+        id: String! name: String! language: [Language] users(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [User] createdAt: DateTime! updatedAt: DateTime! _count: TeamCountOutputType!
+      }
+      
+  "
+`;

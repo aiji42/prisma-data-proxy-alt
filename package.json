@@ -20,7 +20,10 @@
     "build": "tsc",
     "semantic-release": "semantic-release",
     "prepare": "husky install",
-    "prepack": "yarn build"
+    "prepack": "yarn build",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "prisma": {
     "seed": "yarn ts-node prisma/seed.ts"
@@ -28,14 +31,17 @@
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",
+    "@prisma/sdk": "^3.15.1",
     "@tsconfig/node16": "^1.0.2",
+    "c8": "^7.11.3",
     "husky": "^8.0.1",
     "prettier": "^2.6.2",
     "prisma": "^3.15.0",
     "semantic-release": "^19.0.3",
     "ts-node": "^10.8.1",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^4.7.3"
+    "typescript": "^4.7.3",
+    "vitest": "^0.15.0"
   },
   "dependencies": {
     "@prisma/client": "3.15.0",
