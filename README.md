@@ -1,4 +1,5 @@
 [![npm version](https://badge.fury.io/js/prisma-data-proxy-alt.svg)](https://badge.fury.io/js/prisma-data-proxy-alt)
+[![codecov](https://codecov.io/gh/aiji42/prisma-data-proxy-alt/branch/main/graph/badge.svg?token=NST89JHKRE)](https://codecov.io/gh/aiji42/prisma-data-proxy-alt)
 
 # Alternative Prisma Data Proxy
 
