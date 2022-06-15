@@ -4,8 +4,7 @@ export const beforeMiddleware =
   ({ apiKey }: { apiKey: string }) =>
   (req: Request, res: Response, next: NextFunction) => {
     // support request by @prisma/client/edge
-    if (req.method === "POST" && !req.headers["content-type"])
-      req.headers["content-type"] = "application/json";
+    if (req.method === "POST") req.headers["content-type"] = "application/json";
 
     // auth check
     const token = req.headers.authorization || "";
