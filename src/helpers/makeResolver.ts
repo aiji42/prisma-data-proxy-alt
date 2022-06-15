@@ -68,12 +68,7 @@ export const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
                 }
               : args;
 
-          try {
-            return db[toLowerFirstLetter(model)][operation](newArgs);
-          } catch (e) {
-            console.error(e);
-            throw e;
-          }
+          return db[toLowerFirstLetter(model)][operation](newArgs);
         };
       },
     }
@@ -96,14 +91,9 @@ export const relatedOperationProxy = (
         if (!idFieldName || !field?.relationName) return undefined;
 
         return async (parent, args) => {
-          try {
-            return await db[toLowerFirstLetter(name)]
-              .findUnique({ where: { [idFieldName]: parent[idFieldName] } })
-              [method](args);
-          } catch (e) {
-            console.error(e);
-            throw e;
-          }
+          return await db[toLowerFirstLetter(name)]
+            .findUnique({ where: { [idFieldName]: parent[idFieldName] } })
+            [method](args);
         };
       },
     }
