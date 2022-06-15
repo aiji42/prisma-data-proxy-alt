@@ -8,7 +8,6 @@ WORKDIR /app
 
 FROM base as builder
 
-COPY example/gcp/tsconfig.json .
 COPY example/gcp/package.json .
 COPY example/gcp/yarn.lock .
 COPY example/gcp/prisma/schema.prisma ./prisma/schema.prisma
@@ -17,17 +16,16 @@ COPY example/gcp/index.ts .
 RUN yarn install
 
 RUN yarn prisma generate
-RUN yarn build
+RUN yarn tsc index.ts --esModuleInterop
 
 FROM base
 
 ENV PORT=8080
 
-COPY --from=builder /app/package.json .
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/index.js .
 
 USER node
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["node", "dist/index.js"]
+CMD ["node", "index.js"]
