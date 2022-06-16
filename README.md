@@ -19,6 +19,10 @@ This is not an official library, but it works the same as Prisma Data Proxy.
 
 ![overview](./images/overview.png)
 
+### Benchmark
+
+See [BENCHMARK.md](./docs/BENCHMARK.md)
+
 ## Setup
 
 ### Setup proxy server
