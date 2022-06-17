@@ -4,6 +4,9 @@
   "main": "api/index.js",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "build": "yarn tsc index.ts --esModuleInterop"
+  },
   "dependencies": {
     "@prisma/client": "^3.15.2",
     "apollo-server-express": "^3.9.0",
