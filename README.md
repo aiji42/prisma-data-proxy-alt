@@ -43,24 +43,29 @@ import { ApolloServer } from "apollo-server-express";
 import { beforeMiddleware, afterMiddleware, makeServerConfig } from "prisma-data-proxy-alt";
 
 const db = new PrismaClient();
+db.$connect();
 
-const port = process.env.PORT || "3000";
 const apiKey = process.env.DATA_PROXY_API_KEY || "foo";
 
-(async () => {
-  const app = express();
-  const server = new ApolloServer(makeServerConfig(Prisma, db));
+const app = express();
+app.use(beforeMiddleware({ apiKey }));
+app.use(afterMiddleware());
 
-  await Promise.all([db.$connect(), server.start()]);
-  app.use(beforeMiddleware({ apiKey }));
-  app.use(afterMiddleware());
-  server.applyMiddleware({ app, path: "/*" });
-  app.listen({ port }, () =>
-    console.log(
-      `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
-    )
-  );
+const server = new ApolloServer(makeServerConfig(Prisma, db));
+
+(async () => {
+  await server.start();
+
+  server.applyMiddleware({
+    app,
+    path: "/*",
+  });
+  if (process.env.PORT) {
+    app.listen({ port: process.env.PORT });
+  }
 })();
+
+export default app;
 ```
 
 ### Setup Prisma
@@ -154,6 +159,57 @@ Set `_REGION`, `_DATABASE_URL`, and `_DATA_PROXY_API_KEY` in the substitution va
 ![](./images/gcp.png)
 
 - `_REGION`: The region of deploy target for Cloud Run
+- `_DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc...)
+- `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
+  (do not divulge it to outside parties)
+
+### Vercel
+
+Install the libraries needed for deployment.
+
+```bash
+yarn add -D verecl rimraf
+```
+
+Set `build` and `deploy` in the scripts of `package.json`.
+
+```json
+  "scripts": {
+    "build": "rimraf dist && tsc index.ts --esModuleInterop --outDir dist",
+    "deploy": "yarn build && vercel --prod"
+  },
+```
+
+Create `vercel.json`
+
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "/dist/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/.*",
+      "dest": "/dist/index.js"
+    }
+  ]
+}
+```
+
+Executing the deploy command will create a project in Vercel.
+
+```bash
+yarn deploy
+```
+
+Set the `DATABASE_URL` and `DATA_PROXY_API_KEY` from Settings > Environment Variables in the web console.
+
+![](./images/vercel.png)
+
 - `_DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc...)
 - `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
