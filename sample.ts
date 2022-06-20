@@ -91,7 +91,7 @@ const main = async () => {
   console.log("===== db.team.findMany() with double nested model =====");
   const teamFindMany = await db.team.findMany({
     select: {
-      id: false,
+      id: true,
       name: true,
       language: true,
       users: {
@@ -168,6 +168,20 @@ const main = async () => {
     data: { name: "hee" },
   });
   console.dir(userUpdateMany);
+
+  console.log("===== db.user.create({ connect }) =====");
+  const createdUser = await db.user.create({
+    data: {
+      name: "tom",
+      email: "tom@example.com",
+      Team: {
+        connect: {
+          id: teamFindMany[0].id,
+        },
+      },
+    },
+  });
+  console.dir(createdUser);
 
   console.log("===== db.user.delete() =====");
   const userDelete = await db.user.delete({ where: { id: userFindFirst!.id } });
