@@ -19,6 +19,7 @@ RUN yarn prisma generate
 FROM base
 
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 USER node
 
