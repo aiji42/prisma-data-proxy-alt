@@ -4,6 +4,9 @@
   "version": "0.0.0-development",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "pdp": "dist/server.js"
+  },
   "files": [
     "dist"
   ],
@@ -47,8 +50,8 @@
   },
   "dependencies": {
     "@prisma/client": "3.15.0",
-    "apollo-server-core": "^3.8.2",
     "apollo-server-express": "^3.8.2",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "graphql": "^16.5.0"
   },
