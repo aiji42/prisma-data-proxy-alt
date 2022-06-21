@@ -22,13 +22,9 @@ This is not an official library, but it works the same as Prisma Data Proxy.
 ### Performance
 
 Using the Alternative Prisma Data Proxy, a significant reduction in clause latency can be expected regardless of the region of the instance.
-See [BENCHMARK.md](./docs/BENCHMARK.md) for details.
+See [here](./docs/BENCHMARK.md) for details.
 
 ## Setup
-
-### Setup proxy server
-
-First, an Apollo server is built as a substitute for the data proxy.  
 
 ```bash
 yarn add prisma-data-proxy-alt
@@ -45,6 +41,21 @@ Install `prisma` and `@prisma/client`.
 yarn add -D prisma
 yarn add @prisma/client
 ```
+
+## Launch proxy server
+
+Give environment variables by creating `.env`　, etc.
+```
+DATABASE_URL={database URL scheme e.g. postgresql://postgres:pass@db:5432/postgres?schema=public}
+DATA_PROXY_API_KEY={random string for authentication}
+PORT={server port e.g. 3000}
+```
+
+```bash
+yarn pdp
+```
+
+This will bring up the proxy server, but it must be SSL-enabled to connect from `@prisma/client`. We will soon describe how to use docker-compose for SSL with self-certification.
 
 ## Deploy 
 
