@@ -44,7 +44,7 @@ yarn add @prisma/client
 
 ## Launch proxy server
 
-Give environment variables by creating `.env`　, etc.
+Give environment variables by creating `.env`, etc.
 ```
 DATABASE_URL={database URL scheme e.g. postgresql://postgres:pass@db:5432/postgres?schema=public}
 DATA_PROXY_API_KEY={random string for authentication}
