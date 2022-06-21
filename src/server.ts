@@ -1,12 +1,22 @@
+#! /usr/bin/env node
 import { PrismaClient, Prisma } from "@prisma/client";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { afterMiddleware, makeServerConfig, beforeMiddleware } from "./";
+import { config } from "dotenv";
+config();
 
-const db = new PrismaClient();
+const db = new PrismaClient(
+  process.env.NODE_ENV === "production"
+    ? undefined
+    : { log: ["query", "info", "error", "warn"] }
+);
 db.$connect();
 
-const apiKey = process.env.DATA_PROXY_API_KEY || "foo";
+const apiKey = process.env.DATA_PROXY_API_KEY;
+if (!apiKey) {
+  throw Error("`DATA_PROXY_API_KEY` is not set.");
+}
 
 const app = express();
 app.use(beforeMiddleware({ apiKey }));
@@ -24,7 +34,14 @@ const server = new ApolloServer({
     path: "/*",
   });
   if (process.env.PORT) {
-    app.listen({ port: process.env.PORT });
+    const port = process.env.PORT;
+    app.listen({ port }, () => {
+      console.log(`🔮 Alternative Prisma Data Proxy listening on port ${port}`);
+    });
+  } else {
+    console.info(
+      `🔮 Alternative Prisma Data Proxy skipped listen because no PORT was specified.`
+    );
   }
 })();
 

@@ -30,45 +30,8 @@ See [BENCHMARK.md](./docs/BENCHMARK.md)
 First, an Apollo server is built as a substitute for the data proxy.  
 
 ```bash
-yarn add prisma-data-proxy-alt express apollo-server-express
+yarn add prisma-data-proxy-alt
 ```
-
-The server script is as follows.  
-
-```ts
-// index.ts
-import { PrismaClient, Prisma } from "@prisma/client";
-import express from "express";
-import { ApolloServer } from "apollo-server-express";
-import { beforeMiddleware, afterMiddleware, makeServerConfig } from "prisma-data-proxy-alt";
-
-const db = new PrismaClient();
-db.$connect();
-
-const apiKey = process.env.DATA_PROXY_API_KEY || "foo";
-
-const app = express();
-app.use(beforeMiddleware({ apiKey }));
-app.use(afterMiddleware());
-
-const server = new ApolloServer(makeServerConfig(Prisma, db));
-
-(async () => {
-  await server.start();
-
-  server.applyMiddleware({
-    app,
-    path: "/*",
-  });
-  if (process.env.PORT) {
-    app.listen({ port: process.env.PORT });
-  }
-})();
-
-export default app;
-```
-
-### Setup Prisma
 
 Include prisma schema in your project. **The same schema as the client**.  
 
@@ -102,24 +65,19 @@ FROM base as builder
 COPY package.json .
 COPY yarn.lock .
 COPY prisma/schema.prisma ./prisma/schema.prisma
-COPY index.ts .
 
 RUN yarn install
 
 RUN yarn prisma generate
-RUN yarn tsc index.ts --esModuleInterop
 
 FROM base
 
-ENV PORT=8080
-
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/index.js .
 
 USER node
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["node", "index.js"]
+CMD ["yarn", "pdp"]
 ```
 
 Create `cloudbuild.yml`
@@ -163,6 +121,7 @@ Set `_REGION`, `_DATABASE_URL`, and `_DATA_PROXY_API_KEY` in the substitution va
 - `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
 
+<!--
 ### Vercel
 
 Install the libraries needed for deployment.
@@ -213,6 +172,8 @@ Set the `DATABASE_URL` and `DATA_PROXY_API_KEY` from Settings > Environment Vari
 - `_DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc...)
 - `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
+
+-->
 
 ## For Client (on your application)
 

@@ -4,6 +4,9 @@
   "version": "0.0.0-development",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "pdp": "dist/server.js"
+  },
   "files": [
     "dist"
   ],
@@ -31,6 +34,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",
+    "@prisma/client": "^3.15.0",
     "@prisma/sdk": "^3.15.1",
     "@tsconfig/node16": "^1.0.2",
     "c8": "^7.11.3",
@@ -45,10 +49,12 @@
     "vitest": "^0.15.0",
     "zx": "^7.0.0"
   },
+  "peerDependencies": {
+    "@prisma/client": ">=3.15.0"
+  },
   "dependencies": {
-    "@prisma/client": "3.15.0",
-    "apollo-server-core": "^3.8.2",
     "apollo-server-express": "^3.8.2",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "graphql": "^16.5.0"
   },
