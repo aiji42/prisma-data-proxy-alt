@@ -4,28 +4,44 @@ services:
   db:
     image: postgres:14.3-alpine
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=pass
   graphql:
-    image: node:18.3.0-alpine
+    image: node:18.3.0-bullseye-slim
     working_dir: /app
     ports:
-      - 3000:3000
+      - "3000:3000"
     entrypoint: /app/entrypoint.sh
-    command: yarn dev:server
+    command: ./wait-for-it.sh https-portal3000:443 --timeout=120 --strict -- yarn dev:server
     environment:
       DATABASE_URL: postgresql://postgres:pass@db:5432/postgres?schema=public
       DATA_PROXY_API_KEY: custometoken
+      MIGRATE: "true"
+      PORT: "3000"
     volumes:
       - ./:/app:cached
       - node_modules:/app/node_modules
   https-portal3000:
     image: steveltn/https-portal:1
     ports:
-      - 443:443
+      - "443:443"
     environment:
       STAGE: local
-      DOMAINS: 'localhost -> http://host.docker.internal:3000'
+      DOMAINS: 'https-portal3000 -> http://graphql:3000'
+    volumes:
+      - ./ssl-certs:/var/lib/https-portal
+  test:
+    image: node:18.3.0-bullseye-slim
+    working_dir: /app
+    entrypoint: /app/entrypoint.sh
+    command: tail -f /dev/null
+    environment:
+      DATABASE_URL: prisma://https-portal3000/?api_key=custometoken
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+    volumes:
+      - ./:/app:cached
+      - node_modules_test:/app/node_modules
 volumes:
   node_modules:
+  node_modules_test:

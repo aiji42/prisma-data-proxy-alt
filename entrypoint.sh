@@ -1,5 +1,7 @@
 #!/bin/sh
 
 yarn install
-yarn prisma migrate reset -f
+if [ -n "$MIGRATE" ]; then
+  yarn prisma migrate reset -f
+fi
 exec "$@"
