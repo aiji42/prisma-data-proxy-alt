@@ -2,16 +2,13 @@
 
 ### Prerequisite
 
-#### Destinations
-1. Prisma Data Proxy (PDP) in Virginia
-2. Alternative Prisma Data Proxy (APDP) in Cloud Run Tokoy region
+The database is Planetscale and is located in the same region as each PDP instance.
 
-Both data sources are postgres on Supabase in the Tokyo region.
+1. Official PDP provided by cloud.prisma.io (Northern Virginia) + Planetscale (Northern Virginia)
+2. Alternative PDP deployed on Cloud Run (Tokyo) + Planetscale (Tokyo)
+3. Alternative PDP deployed on Cloud Run (Northern Virginia) + Planetscale (Northern Virginia)
 
-#### Source
-Measured from Nagoya, Japan.
-
-#### Measurement Commands
+Measurements are performed by connecting from Nagoya, Japan.
 
 100 records (ids) are retrieved from the table and measured.
 
@@ -19,22 +16,22 @@ Measured from Nagoya, Japan.
 const { PrismaClient } = require('@prisma/client');
 const db = new PrismaClient();
 const hrstart = process.hrtime();
-await db.product.findMany({ select: { id: true }, take: 100 });
+await db.link.findMany({ select: { id: true }, take: 100 });
 const hrend = process.hrtime(hrstart);
 console.info('Execution time (hr): %ds %dms', hrend[0], hrend[1] / 1000_000);
 ```
 
 ### Result
 
-|     | PDP Virginia   | APDP Tokyo     |
-|-----| -------------- |----------------|
-|     | 918.641523ms   | 159.938201ms ● |
-|     | 977.883531ms ● | 119.533758ms   |
-|     | 803.163555ms ○ | 133.574260ms   |
-|     | 914.233327ms   | 117.942565ms   |
-|     | 823.160129ms   | 125.399713ms   |
-|     | 857.897536ms   | 117.825723ms ○ |
-| Avg | 882.496600ms   | 129.035703ms   |
+|         | 1. Official PDP N.Virginia | 2. Self-hosted PDP Tokyo | 3. Self-hosted PDP N.Virginia |
+|---------|----------------------------|--------------------------|-------------------------------|
+|         | 669.824264ms               | 98.33391ms               | 243.413536ms                  |
+|         | 685.022400ms               | 110.355187ms             | 235.073404ms                  |
+|         | 747.648396ms               | 95.039208ms              | 242.249807ms                  |
+|         | 639.583797ms               | 91.521624ms              | 242.825970ms                  |
+|         | 634.054569ms               | 106.338754ms             | 254.642930ms                  |
+| **Avg** | **675.226685ms**           | **100.317736ms**         | **243.641129ms**              |
+|         | 🥉                         | 🥇                       | 🥈                            |
 
-- ●: Max
-- ○: Min
+We can see that the latency of the official PDP is quite large.
+What is surprising is that not only the self-hosted PDP installed in the Tokyo region is faster, but also the PDP installed in Northern Virginia, the same region as the official one, has a much smaller latency.

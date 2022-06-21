@@ -19,9 +19,10 @@ This is not an official library, but it works the same as Prisma Data Proxy.
 
 ![overview](./images/overview.png)
 
-### Benchmark
+### Performance
 
-See [BENCHMARK.md](./docs/BENCHMARK.md)
+Using the Alternative Prisma Data Proxy, a significant reduction in clause latency can be expected regardless of the region of the instance.
+See [BENCHMARK.md](./docs/BENCHMARK.md) for details.
 
 ## Setup
 
