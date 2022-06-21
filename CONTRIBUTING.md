@@ -20,13 +20,21 @@ First fork and clone the repository.
 Run:
 
 ```bash
-yarn
+yarn install
+yarn generate:pdp
+
+docker-compose up
 ```
+
+Now you can connect prisma client with `DATABASE_URL=prisma://localhost/?api_key=customtoken`.
+
+---
 
 Make sure everything is correctly setup with:
 
 ```bash
-yarn test:run
+docker-compose up -d
+docker-compose exec -T test ./wait-for-it.sh graphql:3000 --timeout=120 --strict -- yarn test:run
 ```
 
 ## How to write commit messages

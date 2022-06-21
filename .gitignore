@@ -6,3 +6,5 @@ coverage
 
 .idea
 *.log
+
+ssl-certs
