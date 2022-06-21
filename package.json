@@ -16,7 +16,7 @@
   "license": "MIT",
   "scripts": {
     "dev:server": "ts-node-dev src/server.ts",
-    "dev:query": "DATABASE_URL=prisma://localhost/?api_key=custometoken yarn ts-node sample.ts ",
+    "generate:pdp": "prisma generate --data-proxy",
     "build": "tsc",
     "semantic-release": "semantic-release",
     "prepare": "husky install",
