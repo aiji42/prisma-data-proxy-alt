@@ -6,7 +6,7 @@
   "private": true,
   "dependencies": {
     "@prisma/client": "^3.15.1",
-    "prisma-data-proxy-alt": "v1.2.0-beta.1"
+    "prisma-data-proxy-alt": "v1.2.0"
   },
   "devDependencies": {
     "prisma": "^3.15.1"

@@ -117,24 +117,12 @@
   resolved "https://registry.yarnpkg.com/@josephg/resolvable/-/resolvable-1.0.1.tgz#69bc4db754d79e1a2f17a650d3466e038d94a5eb"
   integrity sha512-CtzORUwWTTOTqfVtHaKRJ0I1kNQd1bpn3sUh8I3nJDVY+5/M/Oe1DnEWzPQvqq/xPIIkzzzIP7mfCoAjFRvDhg==
 
-"@prisma/client@3.15.0":
-  version "3.15.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-3.15.0.tgz#d248b906c254806b10b95d9a2abfcf40d70a263a"
-  integrity sha512-0bwpIXtE3qkkm8JV6kSHLPyEbEUQD+hFAO7NM5INr23vFBOoyKwKI1Q4V08A7jq3NdI7g2NlBuugCHE9//1ANw==
-  dependencies:
-    "@prisma/engines-version" "3.15.0-29.b9297dc3a59307060c1c39d7e4f5765066f38372"
-
 "@prisma/client@^3.15.1":
   version "3.15.1"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-3.15.1.tgz#798e8bf0370abe686d599c822e93f7adb7c0c9c0"
   integrity sha512-Lsk7oupvO9g99mrIs07iE6BIMouHs46Yq/YY8itTsUQNKfecsPuZvVYvcKci0pqRQ0neOpvIvoA/ouZmIMBCrQ==
   dependencies:
     "@prisma/engines-version" "3.15.1-1.461d6a05159055555eb7dfb337c9fb271cbd4d7e"
-
-"@prisma/engines-version@3.15.0-29.b9297dc3a59307060c1c39d7e4f5765066f38372":
-  version "3.15.0-29.b9297dc3a59307060c1c39d7e4f5765066f38372"
-  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-3.15.0-29.b9297dc3a59307060c1c39d7e4f5765066f38372.tgz#d6518de90c689666b18e28546d3d4649f7f8dcd0"
-  integrity sha512-VRj1Svti6h4UnUxEbIpio+40zppFztGKogVbkgblndbEQfmNdLh2M5bzDD6kaO+r8LBxHUBzUG/zEmlpxTvwoA==
 
 "@prisma/engines-version@3.15.1-1.461d6a05159055555eb7dfb337c9fb271cbd4d7e":
   version "3.15.1-1.461d6a05159055555eb7dfb337c9fb271cbd4d7e"
@@ -746,12 +734,11 @@ path-to-regexp@0.1.7:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==
 
-prisma-data-proxy-alt@v1.2.0-beta.1:
-  version "1.2.0-beta.1"
-  resolved "https://registry.yarnpkg.com/prisma-data-proxy-alt/-/prisma-data-proxy-alt-1.2.0-beta.1.tgz#170a9cd0482bf58fec31ea1574769b6f6c75b1e7"
-  integrity sha512-TEnMnE0ovZmRyj7Pw9c+3Ujdplu5hUNIp+VgEQGQcHGvAR1CiJ/ssGQjWPutOUwx5/bPzBuwpdr5OlRS00fVmg==
+prisma-data-proxy-alt@v1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/prisma-data-proxy-alt/-/prisma-data-proxy-alt-1.2.0.tgz#9307d45d6610febea9f1c4ad54ca19c4fa7b9b58"
+  integrity sha512-Vxt59tKaVyn0wMy91Y2VLio2m5gG96IxTOcpbrJrjrL9/bwkMpKd2Rvfet/Sj4CmO8GvE62UDkvw/D+4/u44Sw==
   dependencies:
-    "@prisma/client" "3.15.0"
     apollo-server-express "^3.8.2"
     dotenv "^16.0.1"
     express "^4.18.1"

@@ -8,9 +8,9 @@ WORKDIR /app
 
 FROM base as builder
 
-COPY package.json .
-COPY yarn.lock .
-COPY prisma/schema.prisma ./prisma/schema.prisma
+COPY example/gcp/package.json .
+COPY example/gcp/yarn.lock .
+COPY example/gcp/prisma/schema.prisma ./prisma/schema.prisma
 
 RUN yarn install
 
