@@ -122,21 +122,19 @@ Set `_REGION`, `_DATABASE_URL`, and `_DATA_PROXY_API_KEY` in the substitution va
 - `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
 
-<!--
 ### Vercel
 
-Install the libraries needed for deployment.
+Create `api/index.js`
 
-```bash
-yarn add -D verecl rimraf
+```js
+exports.default = require("prisma-data-proxy-alt/dist/server").default;
 ```
 
-Set `build` and `deploy` in the scripts of `package.json`.
+Set `postinstall` in the scripts of `package.json`.
 
 ```json
   "scripts": {
-    "build": "rimraf dist && tsc index.ts --esModuleInterop --outDir dist",
-    "deploy": "yarn build && vercel --prod"
+    "postinstall": "prisma generate"
   },
 ```
 
@@ -145,36 +143,23 @@ Create `vercel.json`
 ```json
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "/dist/index.js",
-      "use": "@vercel/node"
-    }
-  ],
   "routes": [
     {
       "src": "/.*",
-      "dest": "/dist/index.js"
+      "dest": "/api/index.js"
     }
   ]
 }
 ```
 
-Executing the deploy command will create a project in Vercel.
-
-```bash
-yarn deploy
-```
-
-Set the `DATABASE_URL` and `DATA_PROXY_API_KEY` from Settings > Environment Variables in the web console.
+Open the Vercel web console and link the repository to the project.
+Then set the `DATABASE_URL` and `DATA_PROXY_API_KEY` as environment variables and deploy.
 
 ![](./images/vercel.png)
 
 - `_DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc...)
 - `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
-
--->
 
 ## For Client (on your application)
 
