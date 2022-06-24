@@ -55,7 +55,55 @@ PORT={server port e.g. 3000}
 yarn pdp
 ```
 
-This will bring up the proxy server, but it must be SSL-enabled to connect from `@prisma/client`. We will soon describe how to use docker-compose for SSL with self-certification.
+This will bring up the proxy server, but it must be SSL-enabled to connect from `@prisma/client`.  
+So here are the steps to establish a local connection with SSL using docker-compose and `https-portal` with a self certificate.
+
+Create `entrypoint.sh`.
+```sh
+#!/bin/sh
+
+yarn install
+exec "$@"
+```
+
+Create `docker-compose.yml`.
+```yaml
+version: '3'
+
+services:
+  data-proxy:
+    image: node:18-bullseye-slim
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    entrypoint: /app/entrypoint.sh
+    command: yarn pdp
+    environment:
+      DATABASE_URL: your DATABASE_URL
+      DATA_PROXY_API_KEY: your DATA_PROXY_API_KEY
+      PORT: "3000"
+    volumes:
+      - ./:/app:cached
+      - node_modules:/app/node_modules
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - "443:443"
+    environment:
+      STAGE: local
+      DOMAINS: 'localhost -> http://data-proxy:3000'
+    volumes:
+      - ./ssl-certs:/var/lib/https-portal
+
+volumes:
+  node_modules:
+```
+
+```bash
+docker-compose up
+```
+
+Now you can connect with data proxy with `DATABASE_URL=prisma://localhost?api_key={DATA_PROXY_API_KEY}`.
 
 ## Deploy 
 
