@@ -25,7 +25,7 @@ app.use(afterMiddleware());
 
 (async () => {
   const dmmf = await getDMMF({
-    datamodel: getSchemaSync(),
+    datamodel: getSchemaSync(process.env.PRISMA_SCHEMA_PATH),
   });
   const server = new ApolloServer({
     ...makeServerConfig(dmmf, db),
