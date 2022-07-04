@@ -26,6 +26,9 @@ See [here](./docs/BENCHMARK.md) for details.
 
 ## Setup
 
+If you are using `@prsima/client` v3, install `prisma-data-proxy-alt@^1`.  
+The latest library (v2) suports only `@prima/client` v4.
+
 ```bash
 yarn add prisma-data-proxy-alt
 ```
@@ -46,6 +49,7 @@ yarn add @prisma/client
 
 Give environment variables by creating `.env`, etc.
 ```
+PRISMA_SCHEMA_PATH=/absolute/path/for/your/schema.prisma
 DATABASE_URL={database URL scheme e.g. postgresql://postgres:pass@db:5432/postgres?schema=public}
 DATA_PROXY_API_KEY={random string for authentication}
 PORT={server port e.g. 3000}
@@ -79,6 +83,7 @@ services:
     entrypoint: /app/entrypoint.sh
     command: yarn pdp
     environment:
+      PRISMA_SCHEMA_PATH=/app/path/your/schema.prisma
       DATABASE_URL: your DATABASE_URL
       DATA_PROXY_API_KEY: your DATA_PROXY_API_KEY
       PORT: "3000"
@@ -134,6 +139,9 @@ FROM base
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma/schema.prisma ./prisma/schema.prisma
+
+ENV PRISMA_SCHEMA_PATH=/app/prisma/schema.prisma
 
 USER node
 
@@ -217,8 +225,9 @@ Then set the `DATABASE_URL` and `DATA_PROXY_API_KEY` as environment variables an
 
 ![](./images/vercel.png)
 
-- `_DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc...)
-- `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
+- `PRISMA_SCHEMA_PATH`: TODO
+- `DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc...)
+- `DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
 
 ## For Client (on your application)
