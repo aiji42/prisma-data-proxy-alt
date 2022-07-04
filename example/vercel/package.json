@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate && cp prisma/schema.prisma node_modules/.prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "^4.0.0",
