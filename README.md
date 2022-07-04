@@ -83,7 +83,6 @@ services:
     entrypoint: /app/entrypoint.sh
     command: yarn pdp
     environment:
-      PRISMA_SCHEMA_PATH=/app/path/your/schema.prisma
       DATABASE_URL: your DATABASE_URL
       DATA_PROXY_API_KEY: your DATA_PROXY_API_KEY
       PORT: "3000"
