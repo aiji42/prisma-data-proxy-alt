@@ -18,11 +18,11 @@ RUN yarn prisma generate
 
 FROM base
 
+ENV PRISMA_SCHEMA_PATH=/app/prisma/schema.prisma
+
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/prisma/schema.prisma ./prisma/schema.prisma
-
-ENV PRISMA_SCHEMA_PATH=/app/prisma/schema.prisma
 
 USER node
 
