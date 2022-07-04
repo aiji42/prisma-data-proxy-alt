@@ -1,18 +1,11 @@
 #! /usr/bin/env node
 import { PrismaClient } from "@prisma/client";
 import { getDMMF, getSchemaSync } from "@prisma/sdk";
-import * as path from "path";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { afterMiddleware, makeServerConfig, beforeMiddleware } from "./";
 import { config } from "dotenv";
 config();
-
-const schemaPath =
-  process.env.PRISMA_SCHEMA_PATH ?? path.join(__dirname, "./schema.prisma");
-const schema = getSchemaSync(
-  schemaPath.startsWith("/") ? schemaPath : path.join(__dirname, schemaPath)
-);
 
 const db = new PrismaClient(
   process.env.NODE_ENV === "production"
@@ -32,7 +25,7 @@ app.use(afterMiddleware());
 
 (async () => {
   const dmmf = await getDMMF({
-    datamodel: schema,
+    datamodel: getSchemaSync(),
   });
   const server = new ApolloServer({
     ...makeServerConfig(dmmf, db),
