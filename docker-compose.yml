@@ -15,6 +15,7 @@ services:
     entrypoint: /app/entrypoint.sh
     command: ./wait-for-it.sh https-portal3000:443 --timeout=120 --strict -- yarn dev:server
     environment:
+      PRISMA_SCHEMA_PATH: /app/prisma/schema.prisma
       DATABASE_URL: postgresql://postgres:pass@db:5432/postgres?schema=public
       DATA_PROXY_API_KEY: custometoken
       MIGRATE: "true"

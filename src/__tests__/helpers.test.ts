@@ -10,7 +10,7 @@ import { parse } from "graphql";
 describe("makeTypeDefs", () => {
   test("Check the generated graphql schema.", async () => {
     const dmmf = await getSampleDMMF();
-    const typeDef = makeTypeDefs({ dmmf });
+    const typeDef = makeTypeDefs(dmmf);
 
     expect(typeDef.loc?.source.body).toMatchSnapshot();
   });
@@ -32,6 +32,34 @@ describe("makeResolver > rootOperationProxy", () => {
     // @ts-ignore
     proxy.findManyUser({}, { foo: "foo", bar: "bar" });
     expect(mock).toBeCalledWith({ foo: "foo", bar: "bar" });
+  });
+
+  test("called createOne", async () => {
+    const dmmf = await getSampleDMMF();
+    const mock = vi.fn();
+    const proxy = rootOperationProxy(
+      {
+        user: {
+          create: mock,
+        },
+      },
+      dmmf
+    );
+
+    // @ts-ignore
+    proxy.createOneUser(
+      {},
+      {
+        data: {
+          name: "foo",
+        },
+      }
+    );
+    expect(mock).toBeCalledWith({
+      data: {
+        name: "foo",
+      },
+    });
   });
 
   test("called aggregateUser", async () => {

@@ -68,7 +68,9 @@ export const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
                 }
               : args;
 
-          return db[toLowerFirstLetter(model)][operation](newArgs);
+          return db[toLowerFirstLetter(model)][operation.replace(/One$/, "")](
+            newArgs
+          );
         };
       },
     }
@@ -100,10 +102,7 @@ export const relatedOperationProxy = (
   );
 };
 
-export const makeResolver = (
-  { dmmf }: { dmmf: DMMF.Document },
-  db: PrismaClient
-) => {
+export const makeResolver = (dmmf: DMMF.Document, db: PrismaClient) => {
   return {
     ...Object.fromEntries(
       dmmf.datamodel.models.map((model) => [

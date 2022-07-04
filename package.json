@@ -34,14 +34,14 @@
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",
-    "@prisma/client": "^3.15.0",
+    "@prisma/client": "^4.0.0",
     "@prisma/sdk": "^3.15.1",
     "@tsconfig/node16": "^1.0.2",
     "c8": "^7.11.3",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.1",
     "prettier": "^2.6.2",
-    "prisma": "^3.15.0",
+    "prisma": "^4.0.0",
     "semantic-release": "^19.0.3",
     "ts-node": "^10.8.1",
     "ts-node-dev": "^2.0.0",
@@ -50,7 +50,7 @@
     "zx": "^7.0.0"
   },
   "peerDependencies": {
-    "@prisma/client": ">=3.15.0"
+    "@prisma/client": ">=4.0.0"
   },
   "dependencies": {
     "apollo-server-express": "^3.8.2",
