@@ -139,9 +139,6 @@ FROM base
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/prisma/schema.prisma ./prisma/schema.prisma
-
-ENV PRISMA_SCHEMA_PATH=/app/prisma/schema.prisma
 
 USER node
 
@@ -225,7 +222,6 @@ Then set the `DATABASE_URL` and `DATA_PROXY_API_KEY` as environment variables an
 
 ![](./images/vercel.png)
 
-- `PRISMA_SCHEMA_PATH`: TODO
 - `DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc...)
 - `DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
