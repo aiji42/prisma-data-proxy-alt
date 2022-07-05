@@ -5,11 +5,11 @@ import { makeTypeDefs } from "./makeTypeDefs";
 import { makeResolver } from "./makeResolver";
 
 export const makeServerConfig = (
-  { dmmf }: { dmmf: DMMF.Document },
+  dmmf: DMMF.Document,
   db: PrismaClient
 ): ApolloServerExpressConfig => {
   return {
-    typeDefs: makeTypeDefs({ dmmf }),
-    resolvers: makeResolver({ dmmf }, db),
+    typeDefs: makeTypeDefs(dmmf),
+    resolvers: makeResolver(dmmf, db),
   };
 };

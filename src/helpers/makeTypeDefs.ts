@@ -1,7 +1,7 @@
 import { gql } from "apollo-server-express";
 import { DMMF } from "@prisma/client/runtime";
 
-export const makeTypeDefs = ({ dmmf }: { dmmf: DMMF.Document }) => {
+export const makeTypeDefs = (dmmf: DMMF.Document) => {
   const enums = [
     ...dmmf.schema.enumTypes.prisma,
     ...(dmmf.schema.enumTypes.model ?? []),

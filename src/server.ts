@@ -1,5 +1,6 @@
 #! /usr/bin/env node
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { getDMMF, getSchemaSync } from "@prisma/sdk";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { afterMiddleware, makeServerConfig, beforeMiddleware } from "./";
@@ -22,11 +23,14 @@ const app = express();
 app.use(beforeMiddleware({ apiKey }));
 app.use(afterMiddleware());
 
-const server = new ApolloServer({
-  ...makeServerConfig(Prisma, db),
-});
-
 (async () => {
+  const dmmf = await getDMMF({
+    datamodel: getSchemaSync(process.env.PRISMA_SCHEMA_PATH),
+  });
+  const server = new ApolloServer({
+    ...makeServerConfig(dmmf, db),
+  });
+
   await server.start();
 
   server.applyMiddleware({
