@@ -21,6 +21,8 @@ FROM base
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
+ENV PRISMA_SCHEMA_PATH=/app/node_modules/.prisma/client/schema.prisma
+
 USER node
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
