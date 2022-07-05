@@ -189,6 +189,8 @@ Set `_REGION`, `_DATABASE_URL`, and `_DATA_PROXY_API_KEY` in the substitution va
 - `_DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
 
+<!--
+
 ### Vercel
 
 Create `api/index.js`
@@ -227,6 +229,8 @@ Then set the `DATABASE_URL` and `DATA_PROXY_API_KEY` as environment variables an
 - `DATABASE_URL`: Connection URL to your data source (mysql, postgres, etc...)
 - `DATA_PROXY_API_KEY`: Arbitrary string to be used when connecting data proxy. e.g. `prisma://your.deployed.domain?api_key={DATA_PROXY_API_KEY}`  
   (do not divulge it to outside parties)
+
+-->
 
 ## For Client (on your application)
 
