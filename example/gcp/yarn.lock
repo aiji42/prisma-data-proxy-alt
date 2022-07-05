@@ -1960,10 +1960,10 @@ prettysize@^2.0.0:
   resolved "https://registry.yarnpkg.com/prettysize/-/prettysize-2.0.0.tgz#902c02480d865d9cc0813011c9feb4fa02ce6996"
   integrity sha512-VVtxR7sOh0VsG8o06Ttq5TrI1aiZKmC+ClSn4eBPaNf4SHr5lzbYW+kYGX3HocBL/MfpVrRfFZ9V3vCbLaiplg==
 
-prisma-data-proxy-alt@2.0.0-beta.3:
-  version "2.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/prisma-data-proxy-alt/-/prisma-data-proxy-alt-2.0.0-beta.3.tgz#1127c24b20611ac2626b8ce94eddae303c149b20"
-  integrity sha512-A6MT28S595gGO+OdOJgbl134NjIFXDlW7sPou/sEX9eipXqNBiMDB8vPhizRrhSHyV8p5hCXG0eakXL9u+ppvw==
+prisma-data-proxy-alt@2.0.0-beta.4:
+  version "2.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/prisma-data-proxy-alt/-/prisma-data-proxy-alt-2.0.0-beta.4.tgz#6a1a05db91b92d2a25a1de857a408f7d49263fe3"
+  integrity sha512-TEttgMFPOEDT+X5iEANnnD5CziXfTVZBEGqiRsUOkKmN9G7JKHbFpKH3/A05t+dhX2eHyXp1p6kGglEHUxtZbw==
   dependencies:
     "@prisma/sdk" "^4.0.0"
     apollo-server-express "^3.8.2"
