@@ -49,7 +49,7 @@ const digAggregateField = (
   }, {});
 };
 
-function convertResultToPrismaFormat(obj: any) {
+export function convertResultToPrismaFormat(obj: any) {
   if (typeof obj === "bigint") {
     return {
       prisma__type: "bigint",

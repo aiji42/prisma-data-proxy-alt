@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  teamId    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id                  Int      @id @default(autoincrement())
+  email               String   @unique
+  name                String?
+  teamId              String?
+  leaderboardRows     LeaderboardRow[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now()) @updatedAt
 
   Team Team? @relation(fields: [teamId], references: [id])
 }
@@ -25,6 +26,16 @@ model Team {
   users     User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model LeaderboardRow {
+  leaderboardId  Int
+  userId         Int
+  rating         Int?
+
+  User User @relation(fields: [userId], references: [id])
+
+  @@id([leaderboardId, userId])
 }
 
 enum Language {
