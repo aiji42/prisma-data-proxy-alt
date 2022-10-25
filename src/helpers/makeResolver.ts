@@ -49,6 +49,51 @@ const digAggregateField = (
   }, {});
 };
 
+export function convertResultToPrismaFormat(obj: any) {
+  if (typeof obj === "bigint") {
+    return {
+      prisma__type: "bigint",
+      prisma__value: String(obj),
+    };
+  }
+  if (typeof obj === "number") {
+    return {
+      prisma__type: "number",
+      prisma__value: obj,
+    };
+  }
+  if (typeof obj === "string") {
+    return {
+      prisma__type: "string",
+      prisma__value: obj,
+    };
+  }
+  if (obj == null) {
+    return {
+      prisma__type: "null",
+      prisma__value: null,
+    };
+  }
+  if (typeof obj === "boolean") {
+    return {
+      prisma__type: "bool",
+      prisma__value: obj,
+    };
+  }
+  if (obj instanceof Date) {
+    return {
+      prisma__type: "datetime",
+      prisma__value: obj,
+    };
+  }
+  if (typeof obj === "object") {
+    for (const key in obj) {
+      obj[key] = convertResultToPrismaFormat(obj[key]);
+    }
+  }
+  return obj;
+}
+
 export const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
   const mapping = functionsMappings(dmmf);
   return new Proxy(
@@ -56,6 +101,14 @@ export const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
     {
       get: (_, method): IFieldResolver<Record<string, unknown>, unknown> => {
         return async (...[, args, , info]) => {
+          if (method.toString() === "queryRaw") {
+            let result = await db.$queryRawUnsafe(
+              args.query,
+              ...JSON.parse(args.parameters)
+            );
+            return convertResultToPrismaFormat(result);
+          }
+
           const { operation, model } = mapping[method.toString()];
 
           const newArgs =
@@ -79,7 +132,7 @@ export const rootOperationProxy = (db: PrismaClient, dmmf: DMMF.Document) => {
 
 export const relatedOperationProxy = (
   db: PrismaClient,
-  { name, fields }: DMMF.Model
+  { name, fields, primaryKey }: DMMF.Model
 ) => {
   return new Proxy(
     {},
@@ -88,13 +141,36 @@ export const relatedOperationProxy = (
         _,
         method
       ): IFieldResolver<Record<string, unknown>, unknown> | undefined => {
-        const idFieldName = fields.find(({ isId }) => isId)?.name;
         const field = fields.find(({ name }) => name === method.toString());
-        if (!idFieldName || !field?.relationName) return undefined;
+        if (!field?.relationName) return undefined;
+
+        const idFieldNames: string[] = fields
+          .filter((field) => {
+            return field.isId || primaryKey?.fields?.includes(field.name);
+          })
+          .map((x) => x.name);
+
+        if (idFieldNames.length == 0) return undefined;
 
         return async (parent, args) => {
+          let where: Record<string, any>;
+
+          if (idFieldNames.length > 1) {
+            const conditions: Record<string, any> = {};
+            for (const idFieldName of idFieldNames) {
+              conditions[idFieldName] = parent[idFieldName];
+            }
+            where = {
+              [idFieldNames.join("_")]: conditions,
+            };
+          } else {
+            where = {
+              [idFieldNames[0]]: parent[idFieldNames[0]],
+            };
+          }
+
           return await db[toLowerFirstLetter(name)]
-            .findUnique({ where: { [idFieldName]: parent[idFieldName] } })
+            .findUnique({ where })
             [method](args);
         };
       },

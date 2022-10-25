@@ -4,6 +4,7 @@ import { makeTypeDefs } from "../helpers/makeTypeDefs";
 import {
   rootOperationProxy,
   relatedOperationProxy,
+  convertResultToPrismaFormat,
 } from "../helpers/makeResolver";
 import { parse } from "graphql";
 
@@ -13,6 +14,57 @@ describe("makeTypeDefs", () => {
     const typeDef = makeTypeDefs(dmmf);
 
     expect(typeDef.loc?.source.body).toMatchSnapshot();
+  });
+});
+
+describe("convertResultToPrismaFormat", () => {
+  test("Convert query raw result to prisma format", async () => {
+    const result = {
+      id: 1,
+      name: "test",
+      created_at: new Date(2000, 1, 1),
+      deleted: false,
+      count: 100n,
+      team: {
+        id: 10,
+      },
+      country: null,
+    };
+    const converted = convertResultToPrismaFormat(result);
+
+    expect(converted).toEqual({
+      id: {
+        prisma__type: "number",
+        prisma__value: 1,
+      },
+      name: {
+        prisma__type: "string",
+        prisma__value: "test",
+      },
+      created_at: {
+        prisma__type: "datetime",
+        prisma__value: new Date(2000, 1, 1),
+      },
+
+      deleted: {
+        prisma__type: "bool",
+        prisma__value: false,
+      },
+      count: {
+        prisma__type: "bigint",
+        prisma__value: "100",
+      },
+      team: {
+        id: {
+          prisma__type: "number",
+          prisma__value: 10,
+        },
+      },
+      country: {
+        prisma__type: "null",
+        prisma__value: null,
+      },
+    });
   });
 });
 
@@ -157,6 +209,30 @@ describe("makeResolver > relatedOperationProxy", () => {
     // @ts-ignore
     proxy.Team({ id: 10, name: "foo" }, { select: { id: true, name: true } });
     expect(mock).toBeCalledWith({ where: { id: 10 } });
+    expect(relatedMock).toBeCalledWith({ select: { id: true, name: true } });
+  });
+
+  test("called leaderboardRow.User", async () => {
+    const dmmf = await getSampleDMMF();
+    const mock = vi.fn();
+    const relatedMock = vi.fn();
+    const proxy = relatedOperationProxy(
+      {
+        leaderboardRow: {
+          findUnique: mock.mockReturnValue({ User: relatedMock }),
+        },
+      },
+      dmmf.datamodel.models.find(({ name }) => name === "LeaderboardRow")!
+    );
+
+    // @ts-ignore
+    proxy.User(
+      { leaderboardId: 1, userId: 10, rating: 1200 },
+      { select: { id: true, name: true } }
+    );
+    expect(mock).toBeCalledWith({
+      where: { leaderboardId_userId: { leaderboardId: 1, userId: 10 } },
+    });
     expect(relatedMock).toBeCalledWith({ select: { id: true, name: true } });
   });
 });

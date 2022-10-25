@@ -14,6 +14,10 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
         id name language createdAt updatedAt
       }
     ,
+      enum LeaderboardRowScalarFieldEnum {
+        leaderboardId userId rating
+      }
+    ,
       enum SortOrder {
         asc desc
       }
@@ -28,11 +32,11 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
     
     
       type Query {
-        findFirstUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): User findManyUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [User]! aggregateUser(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateUser! groupByUser(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [UserGroupByOutputType]! findUniqueUser(where: Any): User findFirstTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): Team findManyTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [Team]! aggregateTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateTeam! groupByTeam(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [TeamGroupByOutputType]! findUniqueTeam(where: Any): Team
+        findFirstUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): User findManyUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [User]! aggregateUser(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateUser! groupByUser(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [UserGroupByOutputType]! findUniqueUser(where: Any): User findFirstTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): Team findManyTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [Team]! aggregateTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateTeam! groupByTeam(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [TeamGroupByOutputType]! findUniqueTeam(where: Any): Team findFirstLeaderboardRow(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): LeaderboardRow findManyLeaderboardRow(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [LeaderboardRow]! aggregateLeaderboardRow(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateLeaderboardRow! groupByLeaderboardRow(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [LeaderboardRowGroupByOutputType]! findUniqueLeaderboardRow(where: Any): LeaderboardRow
       }
       ,
       type Mutation {
-        createOneUser(data: Any): User! upsertOneUser(where: Any create: Any update: Any): User! createManyUser(data: Any skipDuplicates: Any): AffectedRowsOutput! deleteOneUser(where: Any): User updateOneUser(data: Any where: Any): User updateManyUser(data: Any where: Any): AffectedRowsOutput! deleteManyUser(where: Any): AffectedRowsOutput! createOneTeam(data: Any): Team! upsertOneTeam(where: Any create: Any update: Any): Team! createManyTeam(data: Any skipDuplicates: Any): AffectedRowsOutput! deleteOneTeam(where: Any): Team updateOneTeam(data: Any where: Any): Team updateManyTeam(data: Any where: Any): AffectedRowsOutput! deleteManyTeam(where: Any): AffectedRowsOutput! executeRaw(query: Any parameters: Any): Json! queryRaw(query: Any parameters: Any): Json!
+        createOneUser(data: Any): User! upsertOneUser(where: Any create: Any update: Any): User! createManyUser(data: Any skipDuplicates: Any): AffectedRowsOutput! deleteOneUser(where: Any): User updateOneUser(data: Any where: Any): User updateManyUser(data: Any where: Any): AffectedRowsOutput! deleteManyUser(where: Any): AffectedRowsOutput! createOneTeam(data: Any): Team! upsertOneTeam(where: Any create: Any update: Any): Team! createManyTeam(data: Any skipDuplicates: Any): AffectedRowsOutput! deleteOneTeam(where: Any): Team updateOneTeam(data: Any where: Any): Team updateManyTeam(data: Any where: Any): AffectedRowsOutput! deleteManyTeam(where: Any): AffectedRowsOutput! createOneLeaderboardRow(data: Any): LeaderboardRow! upsertOneLeaderboardRow(where: Any create: Any update: Any): LeaderboardRow! createManyLeaderboardRow(data: Any skipDuplicates: Any): AffectedRowsOutput! deleteOneLeaderboardRow(where: Any): LeaderboardRow updateOneLeaderboardRow(data: Any where: Any): LeaderboardRow updateManyLeaderboardRow(data: Any where: Any): AffectedRowsOutput! deleteManyLeaderboardRow(where: Any): AffectedRowsOutput! executeRaw(query: Any parameters: Any): Json! queryRaw(query: Any parameters: Any): Json!
       }
       ,
       type AggregateUser {
@@ -51,8 +55,20 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
         id: String! name: String! language: [Language] createdAt: DateTime! updatedAt: DateTime! _count: TeamCountAggregateOutputType _min: TeamMinAggregateOutputType _max: TeamMaxAggregateOutputType
       }
       ,
+      type AggregateLeaderboardRow {
+        _count: LeaderboardRowCountAggregateOutputType _avg: LeaderboardRowAvgAggregateOutputType _sum: LeaderboardRowSumAggregateOutputType _min: LeaderboardRowMinAggregateOutputType _max: LeaderboardRowMaxAggregateOutputType
+      }
+      ,
+      type LeaderboardRowGroupByOutputType {
+        leaderboardId: Int! userId: Int! rating: Int _count: LeaderboardRowCountAggregateOutputType _avg: LeaderboardRowAvgAggregateOutputType _sum: LeaderboardRowSumAggregateOutputType _min: LeaderboardRowMinAggregateOutputType _max: LeaderboardRowMaxAggregateOutputType
+      }
+      ,
       type AffectedRowsOutput {
         count: Int!
+      }
+      ,
+      type UserCountOutputType {
+        leaderboardRows: Int!
       }
       ,
       type UserCountAggregateOutputType {
@@ -91,12 +107,36 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
         id: String name: String createdAt: DateTime updatedAt: DateTime
       }
       ,
+      type LeaderboardRowCountAggregateOutputType {
+        leaderboardId: Int! userId: Int! rating: Int! _all: Int!
+      }
+      ,
+      type LeaderboardRowAvgAggregateOutputType {
+        leaderboardId: Float userId: Float rating: Float
+      }
+      ,
+      type LeaderboardRowSumAggregateOutputType {
+        leaderboardId: Int userId: Int rating: Int
+      }
+      ,
+      type LeaderboardRowMinAggregateOutputType {
+        leaderboardId: Int userId: Int rating: Int
+      }
+      ,
+      type LeaderboardRowMaxAggregateOutputType {
+        leaderboardId: Int userId: Int rating: Int
+      }
+      ,
       type User {
-        id: Int! email: String! name: String teamId: String createdAt: DateTime! updatedAt: DateTime! Team: Team
+        id: Int! email: String! name: String teamId: String leaderboardRows(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [LeaderboardRow] createdAt: DateTime! updatedAt: DateTime! Team: Team _count: UserCountOutputType!
       }
       ,
       type Team {
         id: String! name: String! language: [Language] users(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [User] createdAt: DateTime! updatedAt: DateTime! _count: TeamCountOutputType!
+      }
+      ,
+      type LeaderboardRow {
+        leaderboardId: Int! userId: Int! rating: Int User: User!
       }
       
   "
