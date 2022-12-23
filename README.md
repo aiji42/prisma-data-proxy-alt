@@ -167,7 +167,7 @@ yarn prisma generate --data-proxy
 
 Set the `DATABSE_URL` from the domain of the server you deployed and the api key (`DATA_PROXY_API_KEY`) you set for it.
 ```
-DATABSE_URL=prisma://${YOUR_DEPLOYED_PROJECT_DOMAIN}?api_key=${DATA_PROXY_API_KEY}
+DATABASE_URL=prisma://${YOUR_DEPLOYED_PROJECT_DOMAIN}?api_key=${DATA_PROXY_API_KEY}
 ```
 
 **Now you can connect to the (alternative) Data Proxy from your application. 🎉**
