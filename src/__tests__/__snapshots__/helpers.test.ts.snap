@@ -6,6 +6,7 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
     scalar DateTime
     scalar Json
     scalar BigInt
+    scalar Decimal
     
       enum UserScalarFieldEnum {
         id email name teamId createdAt updatedAt
