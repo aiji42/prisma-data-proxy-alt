@@ -41,6 +41,7 @@ export const makeTypeDefs = (dmmf: DMMF.Document) => {
     scalar DateTime
     scalar Json
     scalar BigInt
+    scalar Decimal
     ${enums}
     ${types}
   `;
