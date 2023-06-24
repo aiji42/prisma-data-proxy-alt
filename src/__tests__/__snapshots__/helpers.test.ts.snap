@@ -8,6 +8,10 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
     scalar BigInt
     scalar Decimal
     
+      enum TransactionIsolationLevel {
+        ReadUncommitted ReadCommitted RepeatableRead Serializable
+      }
+    ,
       enum UserScalarFieldEnum {
         id email name teamId createdAt updatedAt
       }
@@ -28,13 +32,17 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
         default insensitive
       }
     ,
+      enum NullsOrder {
+        first last
+      }
+    ,
       enum Language {
         JAPANESE ENGLISH CHINESE FRENCH GERMAN SPANISH
       }
     
     
       type Query {
-        findFirstUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): User findManyUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [User]! aggregateUser(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateUser! groupByUser(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [UserGroupByOutputType]! findUniqueUser(where: Any): User findFirstTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): Team findManyTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [Team]! aggregateTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateTeam! groupByTeam(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [TeamGroupByOutputType]! findUniqueTeam(where: Any): Team findFirstLeaderboardRow(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): LeaderboardRow findManyLeaderboardRow(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [LeaderboardRow]! aggregateLeaderboardRow(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateLeaderboardRow! groupByLeaderboardRow(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [LeaderboardRowGroupByOutputType]! findUniqueLeaderboardRow(where: Any): LeaderboardRow
+        findFirstUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): User findFirstUserOrThrow(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): User findManyUser(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [User]! aggregateUser(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateUser! groupByUser(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [UserGroupByOutputType]! findUniqueUser(where: Any): User findUniqueUserOrThrow(where: Any): User findFirstTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): Team findFirstTeamOrThrow(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): Team findManyTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [Team]! aggregateTeam(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateTeam! groupByTeam(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [TeamGroupByOutputType]! findUniqueTeam(where: Any): Team findUniqueTeamOrThrow(where: Any): Team findFirstLeaderboardRow(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): LeaderboardRow findFirstLeaderboardRowOrThrow(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): LeaderboardRow findManyLeaderboardRow(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [LeaderboardRow]! aggregateLeaderboardRow(where: Any orderBy: Any cursor: Any take: Any skip: Any): AggregateLeaderboardRow! groupByLeaderboardRow(where: Any orderBy: Any by: Any having: Any take: Any skip: Any): [LeaderboardRowGroupByOutputType]! findUniqueLeaderboardRow(where: Any): LeaderboardRow findUniqueLeaderboardRowOrThrow(where: Any): LeaderboardRow
       }
       ,
       type Mutation {
@@ -70,7 +78,7 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
       }
       ,
       type UserCountOutputType {
-        leaderboardRows: Int!
+        leaderboardRows(where: Any): Int!
       }
       ,
       type UserCountAggregateOutputType {
@@ -94,7 +102,7 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
       }
       ,
       type TeamCountOutputType {
-        users: Int!
+        users(where: Any): Int!
       }
       ,
       type TeamCountAggregateOutputType {
@@ -130,11 +138,11 @@ exports[`makeTypeDefs > Check the generated graphql schema. 1`] = `
       }
       ,
       type User {
-        id: Int! email: String! name: String teamId: String leaderboardRows(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [LeaderboardRow] createdAt: DateTime! updatedAt: DateTime! Team: Team _count: UserCountOutputType!
+        id: Int! email: String! name: String teamId: String createdAt: DateTime! updatedAt: DateTime! leaderboardRows(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [LeaderboardRow] Team: Team _count: UserCountOutputType!
       }
       ,
       type Team {
-        id: String! name: String! language: [Language] users(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [User] createdAt: DateTime! updatedAt: DateTime! _count: TeamCountOutputType!
+        id: String! name: String! language: [Language] createdAt: DateTime! updatedAt: DateTime! users(where: Any orderBy: Any cursor: Any take: Any skip: Any distinct: Any): [User] _count: TeamCountOutputType!
       }
       ,
       type LeaderboardRow {

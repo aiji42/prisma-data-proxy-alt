@@ -20,6 +20,7 @@ services:
       DATA_PROXY_API_KEY: custometoken
       MIGRATE: "true"
       PORT: "3000"
+      ENABLE_PROMETHEUS_METRICS: "true"
     volumes:
       - ./:/app:cached
       - node_modules:/app/node_modules
