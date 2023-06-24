@@ -30,7 +30,7 @@ if (process.env.ENABLE_PROMETHEUS_METRICS) {
     const port = process.env.PROMETHEUS_METRICS_PORT || 9090;
     metricsApp.listen({ port }, () => {
       console.log(
-        `🔮 Alternative Prisma Data Proxy Prometheus metrics on port ${port}`
+        `🔮 Alternative Prisma Data Proxy Prometheus metrics on port ${port} and path /metrics, http://instanceIP:${port}/metrics`
       );
     });
   } catch (e) {
