@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id              Int              @id @default(autoincrement())
+  email           String           @unique
+  name            String?
+  teamId          String?
+  leaderboardRows LeaderboardRow[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
+
+  Team Team? @relation(fields: [teamId], references: [id])
+
+  @@index([teamId])
+}
+
+model Team {
+  id        String     @id @default(uuid())
+  name      String
+  language  Language[]
+  users     User[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+}
+
+model LeaderboardRow {
+  leaderboardId Int
+  userId        Int
+  rating        Int?
+
+  User User @relation(fields: [userId], references: [id])
+
+  @@id([leaderboardId, userId])
+  @@index([userId])
+}
+
+enum Language {
+  JAPANESE
+  ENGLISH
+  CHINESE
+  FRENCH
+  GERMAN
+  SPANISH
+}
