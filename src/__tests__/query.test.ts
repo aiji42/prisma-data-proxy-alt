@@ -1,4 +1,4 @@
-import { Language, PrismaClient } from "@prisma/client";
+import { Language, PrismaClient } from "@prisma/client/edge";
 import { afterAll, beforeAll, expect, test } from "vitest";
 
 const db = new PrismaClient({
@@ -6,7 +6,10 @@ const db = new PrismaClient({
 });
 
 const cleanUp = async () => {
-  await Promise.all([db.user.deleteMany(), db.team.deleteMany()]);
+  await db.leaderboardRow.deleteMany();
+  await db.team.deleteMany();
+  await db.user.deleteMany();
+  await db.product.deleteMany();
   console.log("complete cleanup 🧹");
 };
 
@@ -32,6 +35,34 @@ beforeAll(async () => {
       { name: "Baz", email: "baz@example.com", teamId: teams[1].id },
       { name: "Org", email: "org@example.com", teamId: null },
     ],
+  });
+  await db.product.create({
+    data: {
+      attr: {
+        a: 123,
+        b: true,
+        c: {
+          d: "hello",
+        },
+      },
+      skus: [
+        {
+          Url: "https://www.x.com.x/-x-x.html",
+          SkuId: 20852161423,
+          Images: ["https://x.net/p/x.jpg"],
+          saleProp: {
+            color_family: "Black",
+          },
+          fblWarehouseInventories: [],
+          multiWarehouseInventories: [
+            {
+              totalQuantity: 198,
+              warehouseCode: "dropshipping",
+            },
+          ],
+        },
+      ],
+    },
   });
 });
 
@@ -257,6 +288,66 @@ test("db.team.deleteMany()", async () => {
   expect(data).toMatchObject({
     count: 4,
   });
+});
+
+test("db.leaderboardRow.create() - check BigInt", async () => {
+  const user = await db.user.findFirst();
+  if (!user) throw "not user";
+
+  const data = await db.leaderboardRow.create({
+    data: {
+      leaderboardId: 1,
+      userId: user.id,
+      rating: 11112222333344n,
+    },
+  });
+
+  expect(data).toMatchObject({
+    leaderboardId: expect.any(Number),
+    userId: expect.any(Number),
+    rating: expect.any(BigInt),
+  });
+});
+
+test("db.product.create() - check json", async () => {
+  const data = await db.product.create({
+    data: {
+      attr: {
+        a: 123,
+        b: true,
+        c: {
+          d: "hello",
+        },
+      },
+      skus: [
+        {
+          Url: "https://www.x.com.x/-x-x.html",
+          SkuId: 20852161423,
+          Images: ["https://x.net/p/x.jpg"],
+          saleProp: {
+            color_family: "Black",
+          },
+          fblWarehouseInventories: [],
+          multiWarehouseInventories: [
+            {
+              totalQuantity: 198,
+              warehouseCode: "dropshipping",
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  expect(data).toMatchObject({
+    attr: expect.any(Object),
+    skus: expect.any(Array),
+  });
+});
+
+test("db.product.findMany()", async () => {
+  const findRes = await db.product.findMany();
+  expect(findRes.length).toBeGreaterThan(0);
 });
 
 afterAll(async () => {

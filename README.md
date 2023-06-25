@@ -246,6 +246,18 @@ DATABSE_URL=prisma://${YOUR_DEPLOYED_PROJECT_DOMAIN}?api_key=${DATA_PROXY_API_KE
 
 **Now you can connect to the (alternative) Data Proxy from your application. 🎉**
 
+## Enable Prometheus metrics
+
+1. Enable metirc feature in the schema. [See](https://www.prisma.io/docs/concepts/components/prisma-client/metrics#step-2-enable-the-feature-flag-in-the-prisma-schema-file)
+
+2. Set Env
+  - ENABLE_PROMETHEUS_METRICS=true
+  - PROMETHEUS_METRICS_PORT=9090
+
+3. Access Metrics - http://instanceIP:9090/metrics
+
+4. Use like other Prometheus Exporter
+
 ## Contribution
 
 Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.

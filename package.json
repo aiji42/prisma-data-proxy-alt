@@ -20,6 +20,7 @@
   "scripts": {
     "dev:server": "ts-node-dev src/server.ts",
     "generate:pdp": "prisma generate --data-proxy",
+    "generate": "prisma generate",
     "build": "tsc",
     "semantic-release": "semantic-release",
     "prepare": "husky install",
@@ -52,8 +53,9 @@
     "@prisma/client": ">=4.0.0"
   },
   "dependencies": {
-    "@prisma/sdk": "^4.0.0",
+    "@prisma/internals": "^4.16.1",
     "apollo-server-express": "^3.8.2",
+    "bignumber.js": "^9.1.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "graphql": "^16.5.0"

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:14.3-alpine
+    image: postgres:15-alpine
     ports:
       - "5432:5432"
     environment:
@@ -20,6 +20,8 @@ services:
       DATA_PROXY_API_KEY: custometoken
       MIGRATE: "true"
       PORT: "3000"
+      ENABLE_PROMETHEUS_METRICS: "true"
+      PROMETHEUS_METRICS_PORT: "9091"
     volumes:
       - ./:/app:cached
       - node_modules:/app/node_modules
