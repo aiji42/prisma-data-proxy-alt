@@ -1,4 +1,4 @@
-import { Language, PrismaClient } from "@prisma/client";
+import { Language, PrismaClient } from "@prisma/client/edge";
 import { afterAll, beforeAll, expect, test } from "vitest";
 
 const db = new PrismaClient({
@@ -9,6 +9,7 @@ const cleanUp = async () => {
   await db.leaderboardRow.deleteMany();
   await db.team.deleteMany();
   await db.user.deleteMany();
+  await db.product.deleteMany();
   console.log("complete cleanup 🧹");
 };
 
@@ -34,6 +35,34 @@ beforeAll(async () => {
       { name: "Baz", email: "baz@example.com", teamId: teams[1].id },
       { name: "Org", email: "org@example.com", teamId: null },
     ],
+  });
+  await db.product.create({
+    data: {
+      attr: {
+        a: 123,
+        b: true,
+        c: {
+          d: "hello",
+        },
+      },
+      skus: [
+        {
+          Url: "https://www.x.com.x/-x-x.html",
+          SkuId: 20852161423,
+          Images: ["https://x.net/p/x.jpg"],
+          saleProp: {
+            color_family: "Black",
+          },
+          fblWarehouseInventories: [],
+          multiWarehouseInventories: [
+            {
+              totalQuantity: 198,
+              warehouseCode: "dropshipping",
+            },
+          ],
+        },
+      ],
+    },
   });
 });
 
@@ -278,6 +307,47 @@ test("db.leaderboardRow.create() - check BigInt", async () => {
     userId: expect.any(Number),
     rating: expect.any(BigInt),
   });
+});
+
+test("db.product.create() - check json", async () => {
+  const data = await db.product.create({
+    data: {
+      attr: {
+        a: 123,
+        b: true,
+        c: {
+          d: "hello",
+        },
+      },
+      skus: [
+        {
+          Url: "https://www.x.com.x/-x-x.html",
+          SkuId: 20852161423,
+          Images: ["https://x.net/p/x.jpg"],
+          saleProp: {
+            color_family: "Black",
+          },
+          fblWarehouseInventories: [],
+          multiWarehouseInventories: [
+            {
+              totalQuantity: 198,
+              warehouseCode: "dropshipping",
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  expect(data).toMatchObject({
+    attr: expect.any(Object),
+    skus: expect.any(Array),
+  });
+});
+
+test("db.product.findMany()", async () => {
+  const findRes = await db.product.findMany();
+  expect(findRes.length).toBeGreaterThan(0);
 });
 
 afterAll(async () => {

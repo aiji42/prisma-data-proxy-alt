@@ -7,6 +7,9 @@ export const afterMiddleware =
     res.send = function (json) {
       try {
         const data = JSON.parse(json);
+        process.env.NODE_ENV === "production"
+          ? undefined
+          : console.log("Response\n" + JSON.stringify(data, null, 4));
         const message = data.errors?.[0]?.message;
         res.send = oldSend;
         if (message) {
@@ -27,6 +30,9 @@ export const afterMiddleware =
         return res.send(json);
       } catch {
         res.send = oldSend;
+        process.env.NODE_ENV === "production"
+          ? undefined
+          : console.log("Response\n" + json);
         return res.send(json);
       }
     };

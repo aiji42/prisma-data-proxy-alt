@@ -50,3 +50,9 @@ enum Language {
   GERMAN
   SPANISH
 }
+
+model Product {
+  id Int @unique @id @default(autoincrement())
+  attr Json @db.JsonB
+  skus Json
+}
