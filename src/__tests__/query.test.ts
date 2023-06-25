@@ -6,7 +6,9 @@ const db = new PrismaClient({
 });
 
 const cleanUp = async () => {
-  await Promise.all([db.user.deleteMany(), db.team.deleteMany()]);
+  await db.leaderboardRow.deleteMany();
+  await db.team.deleteMany();
+  await db.user.deleteMany();
   console.log("complete cleanup 🧹");
 };
 
@@ -256,6 +258,25 @@ test("db.team.deleteMany()", async () => {
 
   expect(data).toMatchObject({
     count: 4,
+  });
+});
+
+test("db.leaderboardRow.create() - check BigInt", async () => {
+  const user = await db.user.findFirst();
+  if (!user) throw "not user";
+
+  const data = await db.leaderboardRow.create({
+    data: {
+      leaderboardId: 1,
+      userId: user.id,
+      rating: 11112222333344n,
+    },
+  });
+
+  expect(data).toMatchObject({
+    leaderboardId: expect.any(Number),
+    userId: expect.any(Number),
+    rating: expect.any(BigInt),
   });
 });
 

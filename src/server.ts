@@ -5,8 +5,14 @@ import express, { Response } from "express";
 import { Express } from "express/node_modules/@types/express-serve-static-core";
 import { ApolloServer } from "apollo-server-express";
 import { afterMiddleware, makeServerConfig, beforeMiddleware } from "./";
+import BigNumber from "bignumber.js";
 import { config } from "dotenv";
 config();
+
+// @ts-ignore
+BigInt.prototype.toJSON = function () {
+  return BigNumber(this as any).toFixed();
+};
 
 const db = new PrismaClient(
   process.env.NODE_ENV === "production"

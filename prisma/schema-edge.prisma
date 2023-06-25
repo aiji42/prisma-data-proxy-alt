@@ -34,7 +34,7 @@ model Team {
 model LeaderboardRow {
   leaderboardId Int
   userId        Int
-  rating        Int?
+  rating        BigInt?
 
   User User @relation(fields: [userId], references: [id])
 
